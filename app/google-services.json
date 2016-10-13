@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "902540873139",
+    "firebase_url": "https://beverageservice-b7301.firebaseio.com",
+    "project_id": "beverageservice-b7301",
+    "storage_bucket": "beverageservice-b7301.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902540873139:android:1d067ba03b90248b",
+        "android_client_info": {
+          "package_name": "com.joshuacurcio.beverageservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "902540873139-dolpr6pd9be584482kpufh9d2rep58tn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjgazNWo4lfjZ48fOU5vJBEzIFDksm7F4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
