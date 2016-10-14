@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "902540873139",
-    "firebase_url": "https://beverageservice-b7301.firebaseio.com",
-    "project_id": "beverageservice-b7301",
-    "storage_bucket": "beverageservice-b7301.appspot.com"
+    "project_number": "1095189069811",
+    "firebase_url": "https://curciobeverageservice.firebaseio.com",
+    "project_id": "curciobeverageservice",
+    "storage_bucket": "curciobeverageservice.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:902540873139:android:1d067ba03b90248b",
+        "mobilesdk_app_id": "1:1095189069811:android:1d067ba03b90248b",
         "android_client_info": {
           "package_name": "com.joshuacurcio.beverageservice"
         }
       },
       "oauth_client": [
         {
-          "client_id": "902540873139-dolpr6pd9be584482kpufh9d2rep58tn.apps.googleusercontent.com",
+          "client_id": "1095189069811-4ntgn2epq3ur40co9b341ersfmc1kgga.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAjgazNWo4lfjZ48fOU5vJBEzIFDksm7F4"
+          "current_key": "AIzaSyBKYgiXc3mcOMb_pswaHKASWeZ8lAlwC6w"
         }
       ],
       "services": {
