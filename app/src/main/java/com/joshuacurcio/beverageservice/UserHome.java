@@ -128,7 +128,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         if (id == R.id.buttonPlaceOrder) {
             Singleton.foodItems = new HashMap<String, FoodItem>();
             Singleton.foodMenu = new LinkedList<String>();
-            Singleton.selectedCourse = Singleton.courseIDNameRelationship.get(courseSpinner.getSelectedItem().toString());
+            Singleton.selectedCourse = Singleton.courseIDNameRelationship.get(courseSpinner.getSelectedItem().toString()); //test
 
             Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("menu").child("food").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
