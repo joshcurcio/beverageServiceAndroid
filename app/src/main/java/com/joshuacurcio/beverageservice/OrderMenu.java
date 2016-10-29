@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,27 +36,25 @@ public class OrderMenu extends AppCompatActivity {
         //from there we will have another view depending on what one they selected.
         // everything that gets clicked in the menu gets stored into userOrder
         // userOrder contains a hashmap that connects a drink/food to its price and qty of the order.
-
         Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("menu").child("food").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Singleton.foodItems.put(dataSnapshot.child("name").getValue().toString(), dataSnapshot.getValue(FoodItem.class));
-                Singleton.foodMenu.add(dataSnapshot.child("name").getValue().toString());
-                Log.d(TAG, "onChildAdded: " + Singleton.foodItems.toString());
+                Singleton.foodMenu.add(dataSnapshot.child("name").getValue().toString() + " - " + Singleton.foodItems.get(dataSnapshot.child("name").getValue().toString()).getPrice());
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Singleton.foodItems.remove(dataSnapshot.child("name").getValue().toString());
                 Singleton.foodMenu.remove(dataSnapshot.child("name").getValue().toString());
+                Singleton.foodItems.remove(dataSnapshot.child("name").getValue().toString());
                 Singleton.foodItems.put(dataSnapshot.child("name").getValue().toString(), dataSnapshot.getValue(FoodItem.class));
-                Singleton.foodMenu.add(dataSnapshot.child("name").getValue().toString());
+                Singleton.foodMenu.add(dataSnapshot.child("name").getValue().toString() + " - " + Singleton.foodItems.get(dataSnapshot.child("name").getValue().toString()).getPrice());
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Singleton.foodItems.remove(dataSnapshot.child("name").getValue().toString());
                 Singleton.foodMenu.remove(dataSnapshot.child("name").getValue().toString());
+                Singleton.foodItems.remove(dataSnapshot.child("name").getValue().toString());
             }
 
             @Override
@@ -68,6 +67,7 @@ public class OrderMenu extends AppCompatActivity {
 
             }
         });
+
 
         ArrayAdapter lAdap = new ArrayAdapter(this,android.R.layout.simple_list_item_1, Singleton.foodMenu);
         menuList.setAdapter(lAdap);

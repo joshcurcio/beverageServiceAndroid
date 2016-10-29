@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Console;
 import java.util.Comparator;
@@ -128,6 +129,20 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
             Singleton.foodItems = new HashMap<String, FoodItem>();
             Singleton.foodMenu = new LinkedList<String>();
             Singleton.selectedCourse = Singleton.courseIDNameRelationship.get(courseSpinner.getSelectedItem().toString());
+
+            Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("menu").child("food").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Singleton.foodItems.put(dataSnapshot.child("name").getValue().toString(), dataSnapshot.getValue(FoodItem.class));
+                    Singleton.foodMenu.add(dataSnapshot.child("name").getValue().toString() + " - " + Singleton.foodItems.get(dataSnapshot.child("name").getValue().toString()).getPrice());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
             startActivity(new Intent(UserHome.this, OrderMenu.class));
             Log.d(TAG, Singleton.selectedCourse);
         }
