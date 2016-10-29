@@ -19,6 +19,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import static com.joshuacurcio.beverageservice.Singleton.userOrderCart;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "EmailPassword";
@@ -26,13 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText mEmailField;
     private EditText mPasswordField;
 
-    // [START declare_auth]
-    private FirebaseAuth mAuth;
-    // [END declare_auth]
 
-    // [START declare_auth_listener]
     private FirebaseAuth.AuthStateListener mAuthListener;
-    // [END declare_auth_listener]
 
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
@@ -58,6 +58,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Initalize Singleton Variables
+        Singleton.selectedCourse = "";
+        Singleton.courseIDNameRelationship = new HashMap<String, String>();
+        Singleton.courseMap = new HashMap<String, Course>();
+        Singleton.mAuth = FirebaseAuth.getInstance();
+        Singleton.userOrderCart = new userOrder();
+        Singleton.foodItems = new HashMap<String, FoodItem>();
+        Singleton.foodMenu = new LinkedList<String>();
+
         // Views
         mEmailField = (EditText) findViewById(R.id.userEmail);
         mPasswordField = (EditText) findViewById(R.id.userPassword);
@@ -66,11 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.butCreateAccount).setOnClickListener(this);
         findViewById(R.id.butLogin).setOnClickListener(this);
 
-        // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
 
-        // [START auth_state_listener]
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -83,31 +89,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // [START_EXCLUDE]
-                //updateUI(user);
-                // [END_EXCLUDE]
             }
         };
-        // [END auth_state_listener]
     }
 
-    // [START on_start_add_listener]
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+        Singleton.mAuth.addAuthStateListener(mAuthListener);
     }
-    // [END on_start_add_listener]
-
-    // [START on_stop_remove_listener]
     @Override
     public void onStop() {
         super.onStop();
         if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
+            Singleton.mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-    // [END on_stop_remove_listener]
 
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
@@ -117,27 +114,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         showProgressDialog();
 
-        // [START create_user_with_email]
-        mAuth.createUserWithEmailAndPassword(email, password)
+        Singleton.mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Toast.makeText(MainActivity.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // [START_EXCLUDE]
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END create_user_with_email]
     }
 
     private void signIn(String email, String password) {
@@ -148,8 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         showProgressDialog();
 
-        // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
+        Singleton.mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -164,17 +153,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // [START_EXCLUDE]
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END sign_in_with_email]
     }
 
     private void signOut() {
-        mAuth.signOut();
-//        updateUI(null);
+        Singleton.mAuth.signOut();
     }
 
     private boolean validateForm() {

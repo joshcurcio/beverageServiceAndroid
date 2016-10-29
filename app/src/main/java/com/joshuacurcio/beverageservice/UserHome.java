@@ -31,7 +31,6 @@ import java.util.LinkedList;
 
 public class UserHome extends AppCompatActivity implements View.OnClickListener {
     String TAG = "User Home";
-    DatabaseReference mDatabase;
     Spinner courseSpinner;
 
     FirebaseAuth.AuthStateListener mAuthListener;
@@ -42,7 +41,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_user_home);
 
         Singleton.mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
 
         courseSpinner = (Spinner) findViewById(R.id.courseSpinner);
         LinkedList<String> courseList = new LinkedList<String>();
@@ -55,12 +54,13 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.buttonPlaceOrder).setOnClickListener(this);
         findViewById(R.id.buttonSignOut).setOnClickListener(this);
 
-        mDatabase.child("courses").addChildEventListener(new ChildEventListener() {
+        Singleton.mDatabase.child("courses").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Singleton.courseMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Course.class));
                 Singleton.courseMap.get(dataSnapshot.getKey()).setCourseID(dataSnapshot.getKey());
+                Singleton.courseIDNameRelationship.put(Singleton.courseMap.get(dataSnapshot.getKey()).getCourseName(), dataSnapshot.getKey().toString());
                 spinnerArrayAdapter.add(Singleton.courseMap.get(dataSnapshot.getKey()).getCourseName());
 
                 spinnerArrayAdapter.sort(new Comparator<String>() {
@@ -69,7 +69,6 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
                         return lhs.compareTo(rhs);
                     }
                 });
-
             }
 
             @Override
@@ -124,16 +123,17 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.buttonPlaceOrder) {
-            Singleton.selectedCourse = courseSpinner.getSelectedItem().toString();
+        int id = v.getId();
+        if (id == R.id.buttonPlaceOrder) {
+            Singleton.foodItems = new HashMap<String, FoodItem>();
+            Singleton.foodMenu = new LinkedList<String>();
+            Singleton.selectedCourse = Singleton.courseIDNameRelationship.get(courseSpinner.getSelectedItem().toString());
+            startActivity(new Intent(UserHome.this, OrderMenu.class));
+            Log.d(TAG, Singleton.selectedCourse);
         }
-        else if (i == R.id.buttonSignOut) {
+        else if (id == R.id.buttonSignOut) {
             signOut();
         }
-
-        Toast.makeText(UserHome.this, Singleton.selectedCourse,
-                Toast.LENGTH_SHORT).show();
 
     }
 
