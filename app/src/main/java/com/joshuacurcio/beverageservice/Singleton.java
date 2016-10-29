@@ -29,6 +29,8 @@ public class Singleton {
     public static HashMap<String, DrinkItem> drinkItems;
     public static LinkedList<String> drinkMenu;
 
+    public static UserProfile userProfile;
+
 
 
 }

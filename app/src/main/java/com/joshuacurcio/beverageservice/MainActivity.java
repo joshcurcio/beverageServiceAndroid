@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                         hideProgressDialog();
+
                     }
                 });
     }
@@ -138,24 +139,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         showProgressDialog();
 
-        Singleton.mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+        Singleton.mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(MainActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                // If sign in fails, display a message to the user. If sign in succeeds
+                // the auth state listener will be notified and logic to handle the
+                // signed in user can be handled in the listener.
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "signInWithEmail:failed", task.getException());
+                    Toast.makeText(MainActivity.this, R.string.auth_failed,
+                            Toast.LENGTH_SHORT).show();
+                }
 
-                        hideProgressDialog();
-                    }
-                });
+                hideProgressDialog();
+            }
+        });
     }
 
     private void signOut() {
@@ -188,7 +188,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.butCreateAccount) {
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            //createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            //send to sign up page
+            startActivity(new Intent(MainActivity.this, UserCreateAccount.class));
         } else if (i == R.id.butLogin) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
         }

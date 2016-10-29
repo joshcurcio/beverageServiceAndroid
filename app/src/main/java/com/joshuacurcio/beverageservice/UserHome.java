@@ -164,7 +164,6 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
                 }
             });
 
-
             startActivity(new Intent(UserHome.this, OrderMenu.class));
             Log.d(TAG, Singleton.selectedCourse);
         }
