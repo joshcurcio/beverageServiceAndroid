@@ -128,13 +128,18 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         if (id == R.id.buttonPlaceOrder) {
             Singleton.foodItems = new HashMap<String, FoodItem>();
             Singleton.foodMenu = new LinkedList<String>();
+            Singleton.drinkItems = new HashMap<String, DrinkItem>();
+            Singleton.drinkMenu = new LinkedList<String>();
             Singleton.selectedCourse = Singleton.courseIDNameRelationship.get(courseSpinner.getSelectedItem().toString()); //test
 
             Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("menu").child("food").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Singleton.foodItems.put(dataSnapshot.child("name").getValue().toString(), dataSnapshot.getValue(FoodItem.class));
-                    Singleton.foodMenu.add(dataSnapshot.child("name").getValue().toString() + " - " + Singleton.foodItems.get(dataSnapshot.child("name").getValue().toString()).getPrice());
+                    for( DataSnapshot child : dataSnapshot.getChildren())
+                    {
+                        Singleton.foodItems.put((child.child("name").getValue()).toString(), child.getValue(FoodItem.class));
+                        Singleton.foodMenu.add(child.child("name").getValue().toString() + " - " + Singleton.foodItems.get(child.child("name").getValue().toString()).getPrice());
+                    }
                 }
 
                 @Override
@@ -142,6 +147,23 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
 
                 }
             });
+
+            Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("menu").child("drinks").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for( DataSnapshot child : dataSnapshot.getChildren())
+                    {
+                        Singleton.drinkItems.put((child.child("name").getValue()).toString(), child.getValue(DrinkItem.class));
+                        Singleton.drinkMenu.add(child.child("name").getValue().toString() + " - " + Singleton.drinkItems.get(child.child("name").getValue().toString()).getPrice());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
 
             startActivity(new Intent(UserHome.this, OrderMenu.class));
             Log.d(TAG, Singleton.selectedCourse);
