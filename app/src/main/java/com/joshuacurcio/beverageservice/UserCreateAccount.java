@@ -45,6 +45,8 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         //button
         findViewById(R.id.butConfirm).setOnClickListener(this);
 
+        Singleton.mAuth = FirebaseAuth.getInstance();
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -52,8 +54,6 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
-                    Singleton.mDatabase.getRoot().child("users").push().setValue(Singleton.userProfile);
                     startActivity(new Intent(UserCreateAccount.this, UserHome.class));
                 } else {
                     // User is signed out
@@ -142,7 +142,8 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
                     Toast.makeText(UserCreateAccount.this, R.string.auth_failed,
                             Toast.LENGTH_SHORT).show();
                 }
-               }
+
+            }
         });
 
 
