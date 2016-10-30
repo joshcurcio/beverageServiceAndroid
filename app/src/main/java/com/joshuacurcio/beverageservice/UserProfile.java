@@ -11,6 +11,11 @@ public class UserProfile
     private String Email;
     private String Address;
 
+    public UserProfile()
+    {
+
+    }
+
     public UserProfile(String FirstName, String LastName, String Email, String Address)
     {
         this.FirstName = FirstName;
