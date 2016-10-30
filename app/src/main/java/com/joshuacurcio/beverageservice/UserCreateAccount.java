@@ -1,10 +1,12 @@
 package com.joshuacurcio.beverageservice;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -12,11 +14,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.security.cert.CertificateParsingException;
 
-public class UserCreateAccount extends AppCompatActivity
-{
+public class UserCreateAccount extends AppCompatActivity implements View.OnClickListener {
     private EditText mFirstNameField;
     private EditText mLastNameField;
     private EditText mEmailField;
@@ -36,11 +38,29 @@ public class UserCreateAccount extends AppCompatActivity
         setContentView(R.layout.activity_user_create_account);
 
         mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
-        mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
-        mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
-        mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
-        mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
-        mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
+        mPasswordConfirmField = (EditText) findViewById(R.id.txtConfirmPassword);
+        mPasswordField = (EditText) findViewById(R.id.txtPassword);
+        mAddressField = (EditText) findViewById(R.id.txtAddress);
+        mEmailField = (EditText) findViewById(R.id.txtEmail);
+        mLastNameField = (EditText) findViewById(R.id.txtLastName);
+
+        //button
+        findViewById(R.id.butConfirm).setOnClickListener(this);
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    startActivity(new Intent(UserCreateAccount.this, UserHome.class));
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
     }
 
     private boolean validateForm()
@@ -104,7 +124,7 @@ public class UserCreateAccount extends AppCompatActivity
         return valid;
     }
 
-    public void createAccount()
+    public void createAccount(String email, String password)
     {
         //check to see if passwords match
         if(!validateForm()) {
@@ -112,7 +132,7 @@ public class UserCreateAccount extends AppCompatActivity
         }
 
 
-        Singleton.mAuth.createUserWithEmailAndPassword(mEmailField.getText().toString(), mPasswordField.getText().toString()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+        Singleton.mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
         {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task)
@@ -129,6 +149,15 @@ public class UserCreateAccount extends AppCompatActivity
         });
 
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.butConfirm) {
+            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            //send to sign up page
+        }
     }
 
 

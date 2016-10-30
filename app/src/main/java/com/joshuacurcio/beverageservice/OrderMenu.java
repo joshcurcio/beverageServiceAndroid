@@ -33,7 +33,6 @@ public class OrderMenu extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_menu);
 
-        // Buttons
         findViewById(R.id.butFoodMenu).setOnClickListener(this);
         findViewById(R.id.butDrinkMenu).setOnClickListener(this);
 
