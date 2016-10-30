@@ -157,7 +157,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
             Singleton.mAuth.signInWithEmailAndPassword(mEmailField.getText().toString(), mPasswordField.getText().toString());
 
-            //send to sign up page
+            //send to sign up pagetet
 
         }
     }
