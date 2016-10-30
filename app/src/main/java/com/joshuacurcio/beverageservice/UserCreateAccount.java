@@ -46,21 +46,6 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         findViewById(R.id.butConfirm).setOnClickListener(this);
 
         Singleton.mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    startActivity(new Intent(UserCreateAccount.this, UserHome.class));
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
     }
 
     private boolean validateForm()
@@ -155,9 +140,17 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         if (i == R.id.butConfirm) {
             Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString());
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-            Singleton.mAuth.signInWithEmailAndPassword(mEmailField.getText().toString(), mPasswordField.getText().toString());
 
-            //send to sign up pagetet
+            FirebaseUser user = Singleton.mAuth.getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                //Singleton.mDatabase.child("users").child(user.getUid()).setValue(Singleton.userProfile);
+                startActivity(new Intent(UserCreateAccount.this, UserHome.class));
+            } else {
+                // User is signed out
+                Log.d(TAG, "onAuthStateChanged:signed_out");
+            }
 
         }
     }
