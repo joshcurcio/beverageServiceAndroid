@@ -15,8 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
-import java.security.cert.CertificateParsingException;
 
 public class UserCreateAccount extends AppCompatActivity implements View.OnClickListener {
     private EditText mFirstNameField;
@@ -27,8 +27,6 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
     private EditText mPasswordConfirmField;
     private String TAG;
 
-    private UserProfile userProfile;
-
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
@@ -38,7 +36,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_user_create_account);
 
         mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
-        mPasswordConfirmField = (EditText) findViewById(R.id.txtConfirmPassword);
+        mPasswordConfirmField = (EditText) findViewById(R.id.txtPasswordConfirm);
         mPasswordField = (EditText) findViewById(R.id.txtPassword);
         mAddressField = (EditText) findViewById(R.id.txtAddress);
         mEmailField = (EditText) findViewById(R.id.txtEmail);
@@ -54,6 +52,8 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
+                    Singleton.mDatabase.getRoot().child("users").push().setValue(Singleton.userProfile);
                     startActivity(new Intent(UserCreateAccount.this, UserHome.class));
                 } else {
                     // User is signed out
@@ -124,14 +124,12 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         return valid;
     }
 
-    public void createAccount(String email, String password)
+    public void createAccount(final String email, final String password)
     {
         //check to see if passwords match
         if(!validateForm()) {
             return;
         }
-
-
         Singleton.mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
         {
             @Override
@@ -144,8 +142,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
                     Toast.makeText(UserCreateAccount.this, R.string.auth_failed,
                             Toast.LENGTH_SHORT).show();
                 }
-                Singleton.mDatabase.child("users").child(Singleton.mAuth.getCurrentUser().getUid()).setValue(Singleton.userProfile);
-            }
+               }
         });
 
 
@@ -155,10 +152,12 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.butConfirm) {
+            Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString());
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            Singleton.mAuth.signInWithEmailAndPassword(mEmailField.getText().toString(), mPasswordField.getText().toString());
+
             //send to sign up page
+
         }
     }
-
-
 }

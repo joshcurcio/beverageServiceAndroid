@@ -47,7 +47,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         courseSpinner = (Spinner) findViewById(R.id.courseSpinner);
         LinkedList<String> courseList = new LinkedList<String>();
 
-        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, courseList); //selected item will look like a spinner set from XML
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, courseList);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         courseSpinner.setAdapter(spinnerArrayAdapter);
 
