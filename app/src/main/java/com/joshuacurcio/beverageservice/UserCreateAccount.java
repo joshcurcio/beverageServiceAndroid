@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
@@ -141,11 +142,13 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
             Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString());
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
 
+            Singleton.mAuth.signInWithEmailAndPassword(mEmailField.getText().toString(), mPasswordField.getText().toString());
             FirebaseUser user = Singleton.mAuth.getCurrentUser();
             if (user != null) {
                 // User is signed in
                 Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                //Singleton.mDatabase.child("users").child(user.getUid()).setValue(Singleton.userProfile);
+                Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
+                Singleton.mDatabase.child("users").child(user.getUid()).setValue(Singleton.userProfile);
                 startActivity(new Intent(UserCreateAccount.this, UserHome.class));
             } else {
                 // User is signed out
