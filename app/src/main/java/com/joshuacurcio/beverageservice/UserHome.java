@@ -54,6 +54,13 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         // Buttons
         findViewById(R.id.buttonPlaceOrder).setOnClickListener(this);
         findViewById(R.id.buttonSignOut).setOnClickListener(this);
+        findViewById(R.id.butSettings).setOnClickListener(this);
+
+        if(Singleton.userProfile != null)
+        {
+            Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
+            Singleton.mDatabase.getRoot().child("users").push().setValue(Singleton.userProfile);
+        }
 
         Singleton.mDatabase.child("courses").addChildEventListener(new ChildEventListener() {
             @Override
@@ -167,8 +174,13 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
             startActivity(new Intent(UserHome.this, OrderMenu.class));
             Log.d(TAG, Singleton.selectedCourse);
         }
-        else if (id == R.id.buttonSignOut) {
+        else if (id == R.id.buttonSignOut)
+        {
             signOut();
+        }
+        else if (id == R.id.butSettings)
+        {
+            startActivity(new Intent(UserHome.this, UserProfilePage.class));
         }
 
     }
