@@ -22,7 +22,6 @@ public class Singleton {
     public static String selectedCourse;
     public static FirebaseAuth mAuth;
     public static DatabaseReference mDatabase;
-    public static userOrder userOrderCart;
     public static HashMap<String, FoodItem> foodItems;
     public static LinkedList<String> foodMenu;
 

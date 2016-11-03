@@ -44,6 +44,42 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         Singleton.mAuth = FirebaseAuth.getInstance();
         Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        FirebaseUser user = Singleton.mAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
+            Singleton.mDatabase.child("users").child(user.getUid()).setValue(Singleton.userProfile);
+        } else {
+            // User is signed out
+            startActivity(new Intent(UserHome.this, MainActivity.class));
+        }
+        Singleton.mDatabase.child("users").child(user.getUid()).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Singleton.userProfile = dataSnapshot.getValue(UserProfile.class);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Singleton.userProfile = dataSnapshot.getValue(UserProfile.class);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         courseSpinner = (Spinner) findViewById(R.id.courseSpinner);
         LinkedList<String> courseList = new LinkedList<String>();
 

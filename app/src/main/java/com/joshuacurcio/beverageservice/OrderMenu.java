@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +51,22 @@ public class OrderMenu extends AppCompatActivity implements View.OnClickListener
         lAdap = new ArrayAdapter(this,android.R.layout.simple_list_item_1, Singleton.foodMenu);
         menuList.setAdapter(lAdap);
         menuList.setFocusableInTouchMode(true);
+
+        menuList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+
+                String item = ((TextView)view).getText().toString();
+
+                Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+
+            }
+
+
+        });
     }
 
     @Override

@@ -22,8 +22,6 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import static com.joshuacurcio.beverageservice.Singleton.userOrderCart;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "EmailPassword";
@@ -63,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Singleton.courseIDNameRelationship = new HashMap<String, String>();
         Singleton.courseMap = new HashMap<String, Course>();
         Singleton.mAuth = FirebaseAuth.getInstance();
-        Singleton.userOrderCart = new userOrder();
         Singleton.foodItems = new HashMap<String, FoodItem>();
         Singleton.foodMenu = new LinkedList<String>();
 

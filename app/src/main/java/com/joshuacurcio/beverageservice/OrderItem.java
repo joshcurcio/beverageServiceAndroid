@@ -9,10 +9,17 @@ public class OrderItem {
     private double price;
     private int quantity;
 
-    public OrderItem (String name, double price, int quantity)
+    public OrderItem (DrinkItem drinkItem, int quantity)
     {
-        this.name = name;
-        this.price = price;
+        this.name = drinkItem.getName();
+        this.price = drinkItem.getPrice();
+        this.quantity = quantity;
+    }
+
+    public OrderItem (FoodItem foodItem, int quantity)
+    {
+        this.name = foodItem.getName();
+        this.price = foodItem.getPrice();
         this.quantity = quantity;
     }
 

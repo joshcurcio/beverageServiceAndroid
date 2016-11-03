@@ -146,13 +146,12 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
             FirebaseUser user = Singleton.mAuth.getCurrentUser();
             if (user != null) {
                 // User is signed in
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
                 Singleton.mDatabase.child("users").child(user.getUid()).setValue(Singleton.userProfile);
                 startActivity(new Intent(UserCreateAccount.this, UserHome.class));
             } else {
                 // User is signed out
-                Log.d(TAG, "onAuthStateChanged:signed_out");
+                Log.e(TAG, "Error with create and sign in");
             }
 
         }
