@@ -10,6 +10,7 @@ public class UserProfile
     private String LastName;
     private String Email;
     private String Address;
+    private String PIN;
 
     public UserProfile()
     {
@@ -22,6 +23,14 @@ public class UserProfile
         this.LastName = LastName;
         this.Email = Email;
         this.Address = Address;
+    }
+
+    public String getPIN() {
+        return PIN;
+    }
+
+    public void setPIN(String PIN) {
+        this.PIN = PIN;
     }
 
     public String getFirstName()

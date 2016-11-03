@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +49,34 @@ public class UserProfilePage extends AppCompatActivity
 
         // Get a reference to our users
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Singleton.mDatabase = database.getReference("users");
+        FirebaseUser user = Singleton.mAuth.getCurrentUser();
+        if(user != null) {
+            Singleton.mDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Singleton.userProfile = dataSnapshot.getValue(UserProfile.class);
+                    updateFields();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        else
+        {
+            startActivity(new Intent(UserProfilePage.this, MainActivity.class));
+        }
+        updateFields();
+
+    }
+
+    public void updateFields()
+    {
+        mFirstName.setText(Singleton.userProfile.getFirstName());
+        mLastName.setText(Singleton.userProfile.getLastName());
+        mAddress.setText(Singleton.userProfile.getAddress());
+        mPIN.setText(Singleton.userProfile.getPIN());
     }
 }

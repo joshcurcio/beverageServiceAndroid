@@ -42,36 +42,23 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_user_home);
 
         Singleton.mAuth = FirebaseAuth.getInstance();
-        Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
 
         FirebaseUser user = Singleton.mAuth.getCurrentUser();
         if (user != null) {
             // User is signed in
             Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
-            Singleton.mDatabase.child("users").child(user.getUid()).setValue(Singleton.userProfile);
         } else {
             // User is signed out
             startActivity(new Intent(UserHome.this, MainActivity.class));
         }
-        Singleton.mDatabase.child("users").child(user.getUid()).addChildEventListener(new ChildEventListener() {
+
+        Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        //updates UserProfile whenever it is changed in the database
+        Singleton.mDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 Singleton.userProfile = dataSnapshot.getValue(UserProfile.class);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Singleton.userProfile = dataSnapshot.getValue(UserProfile.class);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
@@ -92,12 +79,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.buttonSignOut).setOnClickListener(this);
         findViewById(R.id.butSettings).setOnClickListener(this);
 
-        if(Singleton.userProfile != null)
-        {
-            Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
-            Singleton.mDatabase.getRoot().child("users").push().setValue(Singleton.userProfile);
-        }
-
+        //listner for when courses are added or changed
         Singleton.mDatabase.child("courses").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -155,15 +137,12 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
 
             }
         });
-
-
     }
 
     private void signOut() {
         Singleton.mAuth.signOut();
         startActivity(new Intent(UserHome.this, MainActivity.class));
     }
-
 
     @Override
     public void onClick(View v) {

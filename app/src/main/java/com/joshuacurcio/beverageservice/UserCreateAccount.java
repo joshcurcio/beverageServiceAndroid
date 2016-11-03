@@ -151,7 +151,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
                 startActivity(new Intent(UserCreateAccount.this, UserHome.class));
             } else {
                 // User is signed out
-                Log.e(TAG, "Error with create and sign in");
+                Log.e(TAG, "Error with create account and sign in");
             }
 
         }
