@@ -1,14 +1,16 @@
-package com.joshuacurcio.beverageservice;
+package com.joshuacurcio.beverageservice.Objects;
 
 /**
- * Created by Josh on 10/29/2016.
+ * Created by Josh on 10/27/2016.
  */
 
-public class DrinkItem {
+public class FoodItem {
+
+
     private String name;
     private double price;
 
-    public DrinkItem(){
+    public FoodItem(){
 
     }
 
@@ -24,9 +26,8 @@ public class DrinkItem {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    public void setPrice(Double price) { this.price = price; }
+
 
     @Override
     public String toString()

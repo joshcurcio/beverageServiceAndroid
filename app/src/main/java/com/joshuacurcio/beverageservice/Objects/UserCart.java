@@ -1,4 +1,4 @@
-package com.joshuacurcio.beverageservice;
+package com.joshuacurcio.beverageservice.Objects;
 
 import java.util.LinkedList;
 

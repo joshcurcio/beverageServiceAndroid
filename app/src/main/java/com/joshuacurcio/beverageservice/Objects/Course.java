@@ -1,4 +1,4 @@
-package com.joshuacurcio.beverageservice;
+package com.joshuacurcio.beverageservice.Objects;
 
 /**
  * Created by Josh on 10/16/2016.

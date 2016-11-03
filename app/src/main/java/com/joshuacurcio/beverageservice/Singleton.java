@@ -1,14 +1,13 @@
 package com.joshuacurcio.beverageservice;
 
-import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
+import com.joshuacurcio.beverageservice.Objects.Course;
+import com.joshuacurcio.beverageservice.Objects.DrinkItem;
+import com.joshuacurcio.beverageservice.Objects.FoodItem;
+import com.joshuacurcio.beverageservice.Objects.UserProfile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -24,6 +23,8 @@ public class Singleton {
     public static DatabaseReference mDatabase;
     public static HashMap<String, FoodItem> foodItems;
     public static LinkedList<String> foodMenu;
+    public static ArrayList CustomFoodListViewValuesArr;
+    public static ArrayList CustomDrinkListViewValuesArr;
 
     public static HashMap<String, DrinkItem> drinkItems;
     public static LinkedList<String> drinkMenu;

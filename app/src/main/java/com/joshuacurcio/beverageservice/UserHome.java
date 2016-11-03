@@ -2,37 +2,37 @@ package com.joshuacurcio.beverageservice;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.joshuacurcio.beverageservice.Objects.Course;
+import com.joshuacurcio.beverageservice.Objects.DrinkItem;
+import com.joshuacurcio.beverageservice.Objects.FoodItem;
+import com.joshuacurcio.beverageservice.Objects.ListModel;
+import com.joshuacurcio.beverageservice.Objects.UserProfile;
 
-import java.io.Console;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 
 
 public class UserHome extends AppCompatActivity implements View.OnClickListener {
     String TAG = "User Home";
     Spinner courseSpinner;
+
 
     FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -40,6 +40,9 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
+
+        Singleton.CustomFoodListViewValuesArr = new ArrayList();
+        Singleton.CustomDrinkListViewValuesArr = new ArrayList();
 
         Singleton.mAuth = FirebaseAuth.getInstance();
 
@@ -159,6 +162,12 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for( DataSnapshot child : dataSnapshot.getChildren())
                     {
+                        final ListModel sched = new ListModel();
+                        sched.setName(child.getValue(FoodItem.class).getName());
+                        sched.setPrice(child.getValue(FoodItem.class).getPrice());
+                        sched.setQuantity(0);
+                        /******** Take Model Object in ArrayList **********/
+                        Singleton.CustomFoodListViewValuesArr.add(sched);
                         Singleton.foodItems.put((child.child("name").getValue()).toString(), child.getValue(FoodItem.class));
                         Singleton.foodMenu.add(child.child("name").getValue().toString() + " - " + Singleton.foodItems.get(child.child("name").getValue().toString()).getPrice());
                     }
@@ -175,6 +184,13 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for( DataSnapshot child : dataSnapshot.getChildren())
                     {
+                        final ListModel sched = new ListModel();
+                        sched.setName(child.getValue(DrinkItem.class).getName());
+                        sched.setPrice(child.getValue(DrinkItem.class).getPrice());
+                        sched.setQuantity(0);
+                        /******** Take Model Object in ArrayList **********/
+                        Singleton.CustomDrinkListViewValuesArr.add(sched);
+
                         Singleton.drinkItems.put((child.child("name").getValue()).toString(), child.getValue(DrinkItem.class));
                         Singleton.drinkMenu.add(child.child("name").getValue().toString() + " - " + Singleton.drinkItems.get(child.child("name").getValue().toString()).getPrice());
                     }
