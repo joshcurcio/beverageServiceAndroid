@@ -52,7 +52,6 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
             Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
         } else {
             // User is signed out
-            startActivity(new Intent(UserHome.this, MainActivity.class));
         }
 
         Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();

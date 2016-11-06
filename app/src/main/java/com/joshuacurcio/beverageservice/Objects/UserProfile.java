@@ -11,7 +11,7 @@ public class UserProfile
     private String Email;
     private String Address;
     private String PIN;
-    private String Type;
+    private String type;
 
     public UserProfile()
     {
@@ -25,11 +25,15 @@ public class UserProfile
         this.Email = Email;
         this.Address = Address;
         this.PIN = PIN;
-        this.Type = Type;
+        this.type = Type;
     }
 
     public String getType() {
-        return Type;
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getPIN() {

@@ -17,8 +17,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.joshuacurcio.beverageservice.Objects.Course;
 import com.joshuacurcio.beverageservice.Objects.FoodItem;
@@ -87,10 +89,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     //updates UserProfile whenever it is changed in the database
+                    Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
                     Singleton.mDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Singleton.userProfile = dataSnapshot.getValue(UserProfile.class);
+                            if(Singleton.userProfile.getType() == "User")
+                            {
+                                startActivity(new Intent(MainActivity.this, UserHome.class));
+                            }
+                            else
+                            {
+                                startActivity(new Intent(MainActivity.this, UserHome.class));
+                            }
                         }
 
                         @Override
@@ -99,14 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     });
 
-                    if(Singleton.userProfile.getType() == "User")
-                    {
-                        startActivity(new Intent(MainActivity.this, UserHome.class));
-                    }
-                    else
-                    {
-                        Singleton.mAuth.signOut();
-                    }
+
 
                 } else {
                     // User is signed out

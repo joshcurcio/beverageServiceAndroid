@@ -37,12 +37,11 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_create_account);
 
+        Singleton.mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = Singleton.mAuth.getCurrentUser();
         if (user != null) {
             // User is signed in
             startActivity(new Intent(UserCreateAccount.this, UserHome.class));
-        } else {
-            // User is signed out
         }
 
         mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
@@ -56,7 +55,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         //button
         findViewById(R.id.butConfirm).setOnClickListener(this);
 
-        Singleton.mAuth = FirebaseAuth.getInstance();
+
     }
 
     private boolean validateForm()
@@ -134,7 +133,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         return valid;
     }
 
-    public void createAccount(final String email, final String password)
+    public void createAccount(String email, String password)
     {
         //check to see if passwords match
         if(!validateForm()) {
@@ -145,12 +144,14 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
             @Override
             public void onComplete(@NonNull Task<AuthResult> task)
             {
-                if (!(task.isSuccessful()))
+                Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                if (!task.isSuccessful())
                 {
                     Toast.makeText(UserCreateAccount.this, R.string.auth_failed,
                             Toast.LENGTH_SHORT).show();
+
                 }
-                Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+
             }
         });
 
@@ -161,8 +162,10 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.butConfirm) {
-            Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString(), mPINField.getText().toString(), "User");
+
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+
+            Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString(), mPINField.getText().toString(), "User");
 
             Singleton.mAuth.signInWithEmailAndPassword(mEmailField.getText().toString(), mPasswordField.getText().toString());
             FirebaseUser user = Singleton.mAuth.getCurrentUser();
