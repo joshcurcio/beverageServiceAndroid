@@ -11,19 +11,25 @@ public class UserProfile
     private String Email;
     private String Address;
     private String PIN;
+    private String Type;
 
     public UserProfile()
     {
 
     }
 
-    public UserProfile(String FirstName, String LastName, String Email, String Address, String PIN)
+    public UserProfile(String FirstName, String LastName, String Email, String Address, String PIN, String Type)
     {
         this.FirstName = FirstName;
         this.LastName = LastName;
         this.Email = Email;
         this.Address = Address;
         this.PIN = PIN;
+        this.Type = Type;
+    }
+
+    public String getType() {
+        return Type;
     }
 
     public String getPIN() {

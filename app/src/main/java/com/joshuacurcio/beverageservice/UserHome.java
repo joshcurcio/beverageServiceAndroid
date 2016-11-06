@@ -57,18 +57,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
 
         Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //updates UserProfile whenever it is changed in the database
-        Singleton.mDatabase.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Singleton.userProfile = dataSnapshot.getValue(UserProfile.class);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         courseSpinner = (Spinner) findViewById(R.id.courseSpinner);
         LinkedList<String> courseList = new LinkedList<String>();

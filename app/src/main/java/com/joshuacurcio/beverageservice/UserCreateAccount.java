@@ -119,10 +119,16 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
 
         String userPIN = mPINField.getText().toString();
         if (TextUtils.isEmpty(userPIN)) {
+
             mPINField.setError("Required.");
             valid = false;
         } else {
             mPINField.setError(null);
+        }
+        if(userPIN.length() != 4)
+        {
+            mPINField.setError("PIN must be 4 digits.");
+            valid = false;
         }
 
         return valid;
@@ -139,14 +145,12 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
             @Override
             public void onComplete(@NonNull Task<AuthResult> task)
             {
-                Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-                if (!task.isSuccessful())
+                if (!(task.isSuccessful()))
                 {
                     Toast.makeText(UserCreateAccount.this, R.string.auth_failed,
                             Toast.LENGTH_SHORT).show();
                 }
-
+                Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
             }
         });
 
@@ -157,7 +161,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.butConfirm) {
-            Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString(), mPINField.getText().toString());
+            Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString(), mPINField.getText().toString(), "User");
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
 
             Singleton.mAuth.signInWithEmailAndPassword(mEmailField.getText().toString(), mPasswordField.getText().toString());
