@@ -26,6 +26,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
     private EditText mAddressField;
     private EditText mPasswordField;
     private EditText mPasswordConfirmField;
+    private EditText mPINField;
     private String TAG;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -42,6 +43,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         mAddressField = (EditText) findViewById(R.id.txtAddress);
         mEmailField = (EditText) findViewById(R.id.txtEmail);
         mLastNameField = (EditText) findViewById(R.id.txtLastName);
+        mPINField = (EditText) findViewById(R.id.txtPIN);
 
         //button
         findViewById(R.id.butConfirm).setOnClickListener(this);
@@ -107,6 +109,14 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
             valid = false;
         }
 
+        String userPIN = mPINField.getText().toString();
+        if (TextUtils.isEmpty(userPIN)) {
+            mPINField.setError("Required.");
+            valid = false;
+        } else {
+            mPINField.setError(null);
+        }
+
         return valid;
     }
 
@@ -139,7 +149,7 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.butConfirm) {
-            Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString());
+            Singleton.userProfile = new UserProfile(mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mEmailField.getText().toString(), mAddressField.getText().toString(), mPINField.getText().toString());
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
 
             Singleton.mAuth.signInWithEmailAndPassword(mEmailField.getText().toString(), mPasswordField.getText().toString());
