@@ -160,6 +160,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
             Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("menu").child("food").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Singleton.CustomFoodListViewValuesArr = new ArrayList();
                     for( DataSnapshot child : dataSnapshot.getChildren())
                     {
                         final ListModel sched = new ListModel();
@@ -168,6 +169,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
                         sched.setQuantity(0);
                         /******** Take Model Object in ArrayList **********/
                         Singleton.CustomFoodListViewValuesArr.add(sched);
+
                         Singleton.foodItems.put((child.child("name").getValue()).toString(), child.getValue(FoodItem.class));
                         Singleton.foodMenu.add(child.child("name").getValue().toString() + " - " + Singleton.foodItems.get(child.child("name").getValue().toString()).getPrice());
                     }
@@ -182,6 +184,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
             Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("menu").child("drinks").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Singleton.CustomDrinkListViewValuesArr = new ArrayList();
                     for( DataSnapshot child : dataSnapshot.getChildren())
                     {
                         final ListModel sched = new ListModel();

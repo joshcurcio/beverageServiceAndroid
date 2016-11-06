@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -174,7 +175,9 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View vi = convertView;
-        ViewHolder holder;
+        final ViewHolder holder;
+        Button add;
+        Button delete;
 
         if (convertView == null) {
 
@@ -187,6 +190,36 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
             holder.name = (TextView) vi.findViewById(R.id.txtName);
             holder.price = (TextView) vi.findViewById(R.id.txtPrice);
             holder.qty = (TextView) vi.findViewById(R.id.txtQty);
+            add = (Button) vi.findViewById(R.id.butAddItem);
+            delete = (Button) vi.findViewById(R.id.butDeleteItem);
+
+            vi.findViewById(R.id.butAddItem).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tempValues.setQuantity(Integer.parseInt(holder.qty.getText().toString())+ 1);
+                    try {
+                        holder.qty.setText(Integer.toString(tempValues.getQuantity()));
+                    } catch (Exception e) {
+                        Log.v(TAG, "you messed up");
+
+                    }
+                }
+            });
+            vi.findViewById(R.id.butDeleteItem).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(tempValues.getQuantity() - 1 >= 0)
+                    {
+                        tempValues.setQuantity(Integer.parseInt(holder.qty.getText().toString()) - 1);
+                        try {
+                            holder.qty.setText(Integer.toString(tempValues.getQuantity()));
+                        } catch (Exception e) {
+                            Log.v(TAG, "you messed up");
+                        }
+                    }
+                }
+            });
+
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag(holder);
@@ -207,7 +240,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
             try {
                 holder.name.setText(tempValues.getName());
                 holder.price.setText(Double.toString(tempValues.getPrice()));
-                holder.qty.setText(tempValues.getQuantity());
+                holder.qty.setText(Integer.toString(tempValues.getQuantity()));
             } catch (Exception e) {
                 Log.v(TAG, "you messed up");
 

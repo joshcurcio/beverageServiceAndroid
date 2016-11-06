@@ -63,11 +63,8 @@ public class OrderMenu extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-
                 String item = ((TextView)view).getText().toString();
-
                 Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-
             }
 
 

@@ -21,44 +21,63 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <TextView
                 android:text="Price:"
-                android:layout_width="167dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView6"
+                android:layout_weight="1"
                 android:textAlignment="center" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtPrice"
-                android:layout_weight="1" />
+                android:layout_weight="1.06"
+                />
+
+            <Button
+                android:text="+"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/butAddItem" />
 
         </LinearLayout>
     </TableRow>
-
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_height="match_parent" >
 
-        <TextView
-            android:text="Qty:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView8"
-            android:layout_weight="1"
-            android:textAlignment="center" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/txtQty"
-            android:layout_weight="1" />
+            <TextView
+                android:text="Qty:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView8"
+                android:layout_weight="1"
+                android:textAlignment="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtQty"
+                android:layout_weight="0.97"
+                />
+
+            <Button
+                android:text="-"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/butDeleteItem" />
+
+        </LinearLayout>
     </TableRow>
-
 </TableLayout>
