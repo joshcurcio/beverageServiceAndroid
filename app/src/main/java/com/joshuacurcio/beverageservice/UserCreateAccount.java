@@ -40,10 +40,9 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         FirebaseUser user = Singleton.mAuth.getCurrentUser();
         if (user != null) {
             // User is signed in
-            Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
+            startActivity(new Intent(UserCreateAccount.this, UserHome.class));
         } else {
             // User is signed out
-            startActivity(new Intent(UserCreateAccount.this, MainActivity.class));
         }
 
         mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
