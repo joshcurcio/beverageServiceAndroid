@@ -196,7 +196,11 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
             vi.findViewById(R.id.butAddItem).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    tempValues.setQuantity(Integer.parseInt(holder.qty.getText().toString())+ 1);
+                    int tempQty = Integer.parseInt(holder.qty.getText().toString())+ 1;
+                    tempValues.setQuantity(tempQty);
+                    Singleton.userCart.remove(tempValues);
+                    Singleton.userCart.add(tempValues);
+
                     try {
                         holder.qty.setText(Integer.toString(tempValues.getQuantity()));
                     } catch (Exception e) {
@@ -208,11 +212,31 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
             vi.findViewById(R.id.butDeleteItem).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(tempValues.getQuantity() - 1 >= 0)
+                    int tempQty = Integer.parseInt(holder.qty.getText().toString()) - 1;
+                    if(tempQty >= 0)
                     {
-                        tempValues.setQuantity(Integer.parseInt(holder.qty.getText().toString()) - 1);
+                        Singleton.userCart.remove(tempValues);
+                        tempValues.setQuantity(tempQty);
+                        if(tempQty == 0)
+                        {
+                           return;
+                        }
+                        else
+                        {
+                            try {
+                                Singleton.userCart.add(tempValues);
+                                holder.qty.setText(Integer.toString(tempValues.getQuantity()));
+                            } catch (Exception e) {
+                                Log.v(TAG, "you messed up");
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        tempQty = 0;
                         try {
-                            holder.qty.setText(Integer.toString(tempValues.getQuantity()));
+                            holder.qty.setText(tempQty + "");
                         } catch (Exception e) {
                             Log.v(TAG, "you messed up");
                         }

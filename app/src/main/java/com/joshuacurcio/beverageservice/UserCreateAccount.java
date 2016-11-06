@@ -37,6 +37,15 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_create_account);
 
+        FirebaseUser user = Singleton.mAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
+        } else {
+            // User is signed out
+            startActivity(new Intent(UserCreateAccount.this, MainActivity.class));
+        }
+
         mFirstNameField = (EditText) findViewById(R.id.txtFirstName);
         mPasswordConfirmField = (EditText) findViewById(R.id.txtPasswordConfirm);
         mPasswordField = (EditText) findViewById(R.id.txtPassword);

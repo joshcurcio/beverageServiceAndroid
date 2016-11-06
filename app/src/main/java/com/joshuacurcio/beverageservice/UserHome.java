@@ -19,14 +19,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.joshuacurcio.beverageservice.Objects.Course;
 import com.joshuacurcio.beverageservice.Objects.DrinkItem;
 import com.joshuacurcio.beverageservice.Objects.FoodItem;
-import com.joshuacurcio.beverageservice.Objects.ListModel;
+import com.joshuacurcio.beverageservice.Objects.OrderItem;
 import com.joshuacurcio.beverageservice.Objects.UserProfile;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Objects;
 
 
 public class UserHome extends AppCompatActivity implements View.OnClickListener {
@@ -43,6 +42,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
 
         Singleton.CustomFoodListViewValuesArr = new ArrayList();
         Singleton.CustomDrinkListViewValuesArr = new ArrayList();
+        Singleton.userCart = new LinkedList<OrderItem>();
 
         Singleton.mAuth = FirebaseAuth.getInstance();
 
@@ -163,7 +163,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
                     Singleton.CustomFoodListViewValuesArr = new ArrayList();
                     for( DataSnapshot child : dataSnapshot.getChildren())
                     {
-                        final ListModel sched = new ListModel();
+                        final OrderItem sched = new OrderItem();
                         sched.setName(child.getValue(FoodItem.class).getName());
                         sched.setPrice(child.getValue(FoodItem.class).getPrice());
                         sched.setQuantity(0);
@@ -187,7 +187,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
                     Singleton.CustomDrinkListViewValuesArr = new ArrayList();
                     for( DataSnapshot child : dataSnapshot.getChildren())
                     {
-                        final ListModel sched = new ListModel();
+                        final OrderItem sched = new OrderItem();
                         sched.setName(child.getValue(DrinkItem.class).getName());
                         sched.setPrice(child.getValue(DrinkItem.class).getPrice());
                         sched.setQuantity(0);
