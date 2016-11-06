@@ -17,7 +17,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.joshuacurcio.beverageservice.Objects.ListModel;
+import com.joshuacurcio.beverageservice.Objects.OrderItem;
 
 import java.util.ArrayList;
 
@@ -30,19 +30,19 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
      * Declare Used Variables
      *********/
     private Activity activity;
-    private ArrayList<ListModel> data;
-    private ArrayList<ListModel> filterData;
-    private ArrayList<ListModel> filterData2;
-    private ArrayList<ListModel> dataOriginal;
+    private ArrayList<OrderItem> data;
+    private ArrayList<OrderItem> filterData;
+    private ArrayList<OrderItem> filterData2;
+    private ArrayList<OrderItem> dataOriginal;
     private static LayoutInflater inflater = null;
     public Resources res;
-    ListModel tempValues = null;
+    OrderItem tempValues = null;
     int i = 0;
 
     /*************
      * CustomAdapter Constructor
      *****************/
-    public CustomAdapter(Activity a, ArrayList<ListModel> d, Resources resLocal) {
+    public CustomAdapter(Activity a, ArrayList<OrderItem> d, Resources resLocal) {
 
         /********** Take passed values **********/
         activity = a;
@@ -84,17 +84,17 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                data = (ArrayList<ListModel>) results.values; // has the filtered values
+                data = (ArrayList<OrderItem>) results.values; // has the filtered values
                 notifyDataSetChanged();  // notifies the data with new filtered values
             }
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
-                ArrayList<ListModel> FilteredArrList = new ArrayList<ListModel>();
+                ArrayList<OrderItem> FilteredArrList = new ArrayList<OrderItem>();
 
                 if (dataOriginal == null) {
-                    dataOriginal = new ArrayList<ListModel>(data); // saves the original data in mOriginalValues
+                    dataOriginal = new ArrayList<OrderItem>(data); // saves the original data in mOriginalValues
                 }
 
                 /********
@@ -122,7 +122,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
 
                             if (constraints.contains(data.toLowerCase())) {
 
-                                ListModel lm = new ListModel();
+                                OrderItem lm = new OrderItem();
                                 lm.setName(dataOriginal.get(i).getName());
                                 lm.setPrice(dataOriginal.get(i).getPrice());
                                 lm.setQuantity(dataOriginal.get(i).getQuantity());
@@ -139,7 +139,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
                             String data = filterData.get(i).getName();
                             String data2 = Double.toString(filterData.get(i).getPrice());
                             if (data.toLowerCase().startsWith(constraint.toString())) {
-                                ListModel lm = new ListModel();
+                                OrderItem lm = new OrderItem();
                                 lm.setName(filterData.get(i).getName());
                                 lm.setPrice(filterData.get(i).getPrice());
                                 lm.setQuantity(filterData.get(i).getQuantity());
@@ -228,13 +228,13 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
 
         if (data.size() <= 0) {
             holder.name.setText("No Results found");
-            holder.price.setText(" ");
-            holder.qty.setText("0.00");
+            holder.price.setText("0.00");
+            holder.qty.setText("0");
 
         } else {
             /***** Get each Model object from Arraylist ********/
             tempValues = null;
-            tempValues = (ListModel) data.get(position);
+            tempValues = (OrderItem) data.get(position);
 
             /************  Set Model values in Holder elements ***********/
             try {

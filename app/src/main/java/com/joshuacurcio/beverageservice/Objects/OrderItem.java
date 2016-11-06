@@ -9,6 +9,11 @@ public class OrderItem {
     private double price;
     private int quantity;
 
+    public OrderItem()
+    {
+
+    }
+
     public OrderItem (DrinkItem drinkItem, int quantity)
     {
         this.name = drinkItem.getName();
