@@ -56,8 +56,6 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
 
         Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
-
         courseSpinner = (Spinner) findViewById(R.id.courseSpinner);
         LinkedList<String> courseList = new LinkedList<String>();
 

@@ -172,7 +172,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
     /******
      * Depends upon data size called for each row , Create each ListView row
      *****/
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         View vi = convertView;
         final ViewHolder holder;
@@ -190,6 +190,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
             holder.name = (TextView) vi.findViewById(R.id.txtName);
             holder.price = (TextView) vi.findViewById(R.id.txtPrice);
             holder.qty = (TextView) vi.findViewById(R.id.txtQty);
+
             add = (Button) vi.findViewById(R.id.butAddItem);
             delete = (Button) vi.findViewById(R.id.butDeleteItem);
 
@@ -197,8 +198,8 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
                 @Override
                 public void onClick(View v) {
                     int tempQty = Integer.parseInt(holder.qty.getText().toString())+ 1;
+                    tempValues = data.get(position);
                     tempValues.setQuantity(tempQty);
-                    Singleton.userCart.remove(tempValues);
                     Singleton.userCart.add(tempValues);
 
                     try {
@@ -215,6 +216,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
                     int tempQty = Integer.parseInt(holder.qty.getText().toString()) - 1;
                     if(tempQty >= 0)
                     {
+                        tempValues = data.get(position);
                         Singleton.userCart.remove(tempValues);
                         tempValues.setQuantity(tempQty);
                         if(tempQty == 0)

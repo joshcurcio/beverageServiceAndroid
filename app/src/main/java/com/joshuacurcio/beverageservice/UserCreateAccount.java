@@ -154,8 +154,6 @@ public class UserCreateAccount extends AppCompatActivity implements View.OnClick
 
             }
         });
-
-
     }
 
     @Override

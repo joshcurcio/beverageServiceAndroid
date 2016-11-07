@@ -7,9 +7,10 @@ package com.joshuacurcio.beverageservice.Objects;
 public class FoodItem {
     private String name;
     private double price;
+    private int qty;
 
     public FoodItem(){
-
+        this.qty = 0;
     }
 
     public String getName() {
