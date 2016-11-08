@@ -246,7 +246,7 @@ public class CustomAdapterForCart extends BaseAdapter implements View.OnClickLis
             holder = (ViewHolder) vi.getTag();
 
         if (data.size() <= 0) {
-            holder.name.setText("No Results found");
+            holder.name.setText("No Items in Cart");
             holder.price.setText("0.00");
             holder.qty.setText("0");
 

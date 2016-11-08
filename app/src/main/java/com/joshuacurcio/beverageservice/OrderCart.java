@@ -9,6 +9,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.stripe.android.*;
+
 
 public class OrderCart extends AppCompatActivity {
 
@@ -16,6 +18,9 @@ public class OrderCart extends AppCompatActivity {
     private String TAG;
     private ListAdapter lAdap;
     private Resources res;
+    private TextView subTotal;
+    private TextView tax;
+    private TextView total;
 
 
     @Override
@@ -28,6 +33,10 @@ public class OrderCart extends AppCompatActivity {
         //from there we will have another view depending on what one they selected.
         // everything that gets clicked in the menu gets stored into userOrder
         // userOrder contains a hashmap that connects a drink/food to its price and qty of the order.
+
+        subTotal = (TextView) findViewById(R.id.txtSubtotal);
+        tax = (TextView) findViewById(R.id.txtTax);
+        total = (TextView) findViewById(R.id.txtTotal);
 
         lAdap = new CustomAdapterForCart(OrderCart.this, Singleton.userCart, res);
         orderList.setAdapter(lAdap);
@@ -45,6 +54,10 @@ public class OrderCart extends AppCompatActivity {
 
 
         });
+
+        subTotal.setText("$" + Singleton.userOrder.getSubTotal());
+        tax.setText("$" + Singleton.userOrder.getTax());
+        total.setText("$" + Singleton.userOrder.getTotal());
     }
 
 }

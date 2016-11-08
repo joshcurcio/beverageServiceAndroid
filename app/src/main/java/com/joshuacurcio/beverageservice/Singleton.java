@@ -6,6 +6,7 @@ import com.joshuacurcio.beverageservice.Objects.Course;
 import com.joshuacurcio.beverageservice.Objects.DrinkItem;
 import com.joshuacurcio.beverageservice.Objects.FoodItem;
 import com.joshuacurcio.beverageservice.Objects.OrderItem;
+import com.joshuacurcio.beverageservice.Objects.UserOrder;
 import com.joshuacurcio.beverageservice.Objects.UserProfile;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class Singleton {
     //keeps track of courses drinks
     public static HashMap<String, DrinkItem> drinkItems;
     public static LinkedList<String> drinkMenu;
+
+    public static UserOrder userOrder;
 
     //used for the menu list
     public static ArrayList CustomFoodListViewValuesArr;

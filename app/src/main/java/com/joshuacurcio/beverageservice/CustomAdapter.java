@@ -225,8 +225,6 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
 
                         }
                     }
-
-
                 }
             });
 

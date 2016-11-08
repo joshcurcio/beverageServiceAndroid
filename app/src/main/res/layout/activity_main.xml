@@ -15,9 +15,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="26dp">
 
         <EditText
             android:layout_width="match_parent"
@@ -54,30 +55,6 @@
                 android:id="@+id/butLogin"
                 android:layout_weight="1" />
         </LinearLayout>
-
-        <TextView
-            android:text="-------------------OR-------------------"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView"
-            android:textSize="18sp"
-            android:textAlignment="center"
-            android:fontFamily="sans-serif" />
-
-        <Button
-            android:text="Login as Server"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/butServerLogin" />
-
-        <TextView
-            android:text="-------------------OR-------------------"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            android:textSize="18sp"
-            android:textAlignment="center"
-            android:fontFamily="sans-serif" />
 
     </LinearLayout>
 </RelativeLayout>

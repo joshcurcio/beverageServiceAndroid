@@ -6,75 +6,79 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtName"
-            android:textSize="18sp" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="match_parent">
 
             <TextView
-                android:text="Price:"
-                android:layout_width="wrap_content"
+                android:layout_width="67dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView6"
-                android:layout_weight="1"
-                android:textAlignment="center" />
+                android:id="@+id/txtName"
+                android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtPrice"
-                android:layout_weight="1.06"
-                />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="182dp"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp">
+
+                    <TextView
+                        android:text="Price:"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/textView6"
+                        android:layout_weight="1"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:text="Qty:"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/textView8"
+                        android:layout_weight="1"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtPrice"
+                        android:layout_weight="1"
+                        android:textAlignment="center" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/txtQty"
+                        android:layout_weight="1"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <Button
                 android:text="+"
-                android:layout_width="38dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/butAddItem"
-                android:layout_weight="0.08" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/butAddItem" />
+
 
         </LinearLayout>
+
     </TableRow>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <TextView
-                android:text="Qty:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView8"
-                android:layout_weight="1"
-                android:textAlignment="center" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/txtQty"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-    </TableRow>
 </TableLayout>

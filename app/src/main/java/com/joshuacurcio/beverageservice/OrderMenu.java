@@ -14,24 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.joshuacurcio.beverageservice.Objects.OrderItem;
-import com.joshuacurcio.beverageservice.R;
-import com.joshuacurcio.beverageservice.Singleton;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-
-import static com.joshuacurcio.beverageservice.Singleton.mDatabase;
+import com.joshuacurcio.beverageservice.Objects.UserOrder;
 
 public class OrderMenu extends AppCompatActivity implements View.OnClickListener {
     public ListView menuList;
@@ -90,6 +73,8 @@ public class OrderMenu extends AppCompatActivity implements View.OnClickListener
             menuList.setFocusableInTouchMode(true);
         }
         else if (id== R.id.buttonGoToCart){
+            double subTotal = 0.00;
+            int index = 0;
             for(String key: Singleton.userMenuToCart.keySet())
             {
                 if(Singleton.userCart.contains(Singleton.userMenuToCart.get(key)))
@@ -97,9 +82,11 @@ public class OrderMenu extends AppCompatActivity implements View.OnClickListener
                     Singleton.userCart.remove(Singleton.userMenuToCart.get(key));
                 }
                 Singleton.userCart.add(Singleton.userMenuToCart.get(key));
+                subTotal += Singleton.userCart.get(index).getPrice() * Singleton.userCart.get(index).getQuantity();
+                index++;
             }
+            Singleton.userOrder = new UserOrder(Singleton.userCart, subTotal, subTotal*0.05, subTotal * 1.05);
             startActivity(new Intent(OrderMenu.this, OrderCart.class));
-
         }
 
     }
