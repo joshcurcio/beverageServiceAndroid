@@ -42,7 +42,8 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
 
         Singleton.CustomFoodListViewValuesArr = new ArrayList();
         Singleton.CustomDrinkListViewValuesArr = new ArrayList();
-        Singleton.userCart = new LinkedList<OrderItem>();
+        Singleton.userCart = new ArrayList<>();
+        Singleton.userMenuToCart = new HashMap<>();
 
         Singleton.mAuth = FirebaseAuth.getInstance();
 
@@ -67,6 +68,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.buttonPlaceOrder).setOnClickListener(this);
         findViewById(R.id.buttonSignOut).setOnClickListener(this);
         findViewById(R.id.butSettings).setOnClickListener(this);
+
 
         //listner for when courses are added or changed
         Singleton.mDatabase.child("courses").addChildEventListener(new ChildEventListener() {

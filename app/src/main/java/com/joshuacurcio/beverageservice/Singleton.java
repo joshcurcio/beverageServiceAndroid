@@ -42,6 +42,7 @@ public class Singleton {
     //keeps the logged in user information
     public static UserProfile userProfile;
 
-    public static LinkedList<OrderItem> userCart;
+    public static ArrayList<OrderItem> userCart;
+    public static HashMap<String, OrderItem> userMenuToCart;
 
 }

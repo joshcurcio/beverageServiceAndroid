@@ -18,7 +18,8 @@
         <activity android:name=".UserHome" />
         <activity android:name=".OrderMenu" />
         <activity android:name=".UserCreateAccount" />
-        <activity android:name=".UserProfilePage"></activity>
+        <activity android:name=".UserProfilePage" />
+        <activity android:name=".OrderCart"></activity>
     </application>
 
 </manifest>

@@ -41,12 +41,14 @@
 
             <Button
                 android:text="+"
-                android:layout_width="wrap_content"
+                android:layout_width="38dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/butAddItem" />
+                android:id="@+id/butAddItem"
+                android:layout_weight="0.08" />
 
         </LinearLayout>
     </TableRow>
+
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -65,18 +67,13 @@
                 android:layout_weight="1"
                 android:textAlignment="center" />
 
-            <TextView
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
                 android:id="@+id/txtQty"
-                android:layout_weight="0.97"
-                />
-
-            <Button
-                android:text="-"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/butDeleteItem" />
+                android:layout_weight="1" />
 
         </LinearLayout>
     </TableRow>

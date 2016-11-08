@@ -18,6 +18,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.joshuacurcio.beverageservice.Objects.OrderItem;
 import com.joshuacurcio.beverageservice.R;
 import com.joshuacurcio.beverageservice.Singleton;
 
@@ -26,6 +27,7 @@ import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
@@ -45,6 +47,8 @@ public class OrderMenu extends AppCompatActivity implements View.OnClickListener
 
         findViewById(R.id.butFoodMenu).setOnClickListener(this);
         findViewById(R.id.butDrinkMenu).setOnClickListener(this);
+        findViewById(R.id.buttonGoToCart).setOnClickListener(this);
+
         res = Resources.getSystem();
         menuList = (ListView) findViewById(R.id.menuListView);
         // this will be a hashmap of the items
@@ -84,6 +88,18 @@ public class OrderMenu extends AppCompatActivity implements View.OnClickListener
             lAdap = new CustomAdapter(OrderMenu.this, Singleton.CustomDrinkListViewValuesArr, res);
             menuList.setAdapter(lAdap);
             menuList.setFocusableInTouchMode(true);
+        }
+        else if (id== R.id.buttonGoToCart){
+            for(String key: Singleton.userMenuToCart.keySet())
+            {
+                if(Singleton.userCart.contains(Singleton.userMenuToCart.get(key)))
+                {
+                    Singleton.userCart.remove(Singleton.userMenuToCart.get(key));
+                }
+                Singleton.userCart.add(Singleton.userMenuToCart.get(key));
+            }
+            startActivity(new Intent(OrderMenu.this, OrderCart.class));
+
         }
 
     }

@@ -1,11 +1,12 @@
 package com.joshuacurcio.beverageservice;
 
 /**
- * Created by Josh on 11/3/2016.
+ * Created by Josh on 11/7/2016.
  */
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +23,11 @@ import android.widget.Toast;
 import com.joshuacurcio.beverageservice.Objects.OrderItem;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import static com.google.android.gms.internal.zzs.TAG;
 
 /********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/
-public class CustomAdapter extends BaseAdapter implements View.OnClickListener, Filterable {
+public class CustomAdapterForCart extends BaseAdapter implements View.OnClickListener, Filterable {
 
     /***********
      * Declare Used Variables
@@ -46,7 +46,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
     /*************
      * CustomAdapter Constructor
      *****************/
-    public CustomAdapter(Activity a, ArrayList<OrderItem> d, Resources resLocal) {
+    public CustomAdapterForCart(Activity a, ArrayList<OrderItem> d, Resources resLocal) {
 
         /********** Take passed values **********/
         activity = a;
@@ -137,6 +137,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
                         filterData2 = FilteredArrList;
                         results.count = FilteredArrList.size();
                         results.values = FilteredArrList;
+
                     } else {
 
                         for (int i = 0; i < filterData.size(); i++) {
@@ -199,34 +200,42 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
             vi.findViewById(R.id.butAddItem).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int tempQty = Integer.parseInt(holder.qty.getText().toString());
-                    tempValues = data.get(position);
-                    if(tempQty == 0)
+                    int tempQty = -1;
+                    try{
+                        tempQty = Integer.parseInt(holder.qty.getText().toString());
+
+                    }
+                    catch (Exception e)
                     {
-                        if(Singleton.userMenuToCart.containsKey(tempValues.getName()))
+
+                    }
+                    tempValues = data.get(position);
+                    if(tempQty <= 0)
+                    {
+                        if(Singleton.userCart.contains(tempValues))
                         {
                             Singleton.userMenuToCart.remove(tempValues.getName());
+                            Singleton.userCart.remove(tempValues);
+                            if(Singleton.userCart.size() == 0)
+                            {
+                                notifyDataSetChanged();
+                            }
                         }
                     }
                     else
                     {
                         tempValues.setQuantity(tempQty);
-                        if(Singleton.userMenuToCart.containsKey(tempValues.getName()))
+                        if(Singleton.userCart.contains(tempValues))
                         {
-                            Toast.makeText(activity, "Item already in cart",
-                                    Toast.LENGTH_SHORT).show();
-                            return;
+                            Singleton.userCart.remove(tempValues);
                         }
-                        Singleton.userMenuToCart.put(tempValues.getName(), tempValues);
+                        Singleton.userCart.add(tempValues);
                         try {
                             holder.qty.setText(Integer.toString(tempValues.getQuantity()));
                         } catch (Exception e) {
                             Log.v(TAG, "you messed up");
-
                         }
                     }
-
-
                 }
             });
 
