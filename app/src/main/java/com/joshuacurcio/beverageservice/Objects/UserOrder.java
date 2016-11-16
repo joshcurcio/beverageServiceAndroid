@@ -11,15 +11,17 @@ public class UserOrder {
     private double total;
     private double tax;
     private double subTotal;
+    private double fees;
 
     public UserOrder(){
 
     }
 
-    public UserOrder(ArrayList orderItems, double subTotal, double tax, double  total){
+    public UserOrder(ArrayList orderItems, double subTotal, double tax, double fees,double  total){
         this.orderItems = orderItems;
         this.total = total;
         this.tax = tax;
+        this.fees = fees;
         this.subTotal = subTotal;
     }
 
@@ -33,6 +35,10 @@ public class UserOrder {
 
     public Double getTax() {
         return tax;
+    }
+
+    public double getFees() {
+        return fees;
     }
 
     public Double getSubTotal() {

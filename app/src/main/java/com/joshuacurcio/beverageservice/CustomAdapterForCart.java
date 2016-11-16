@@ -235,28 +235,18 @@ public class CustomAdapterForCart extends BaseAdapter implements View.OnClickLis
                             Log.v("", "you messed up");
                         }
                     }
-                    double subTotal = 0.00;
-                    int index = 0;
-                    for(String key: Singleton.userMenuToCart.keySet())
-                    {
-                        if(Singleton.userCart.contains(Singleton.userMenuToCart.get(key)))
-                        {
-                            Singleton.userCart.remove(Singleton.userMenuToCart.get(key));
-                        }
-                        Singleton.userCart.add(Singleton.userMenuToCart.get(key));
-                        subTotal += Singleton.userCart.get(index).getPrice() * Singleton.userCart.get(index).getQuantity();
-                        index++;
-                    }
 
-                    Singleton.userOrder = new UserOrder(Singleton.userCart, subTotal, subTotal*0.05, subTotal * 1.05);
+                    Singleton.updateUserCart();
 
                     TextView cartSubTotal = (TextView) activity.findViewById(R.id.txtSubtotal);
                     TextView tax = (TextView) activity.findViewById(R.id.txtTax);
+                    TextView fees = (TextView) activity.findViewById(R.id.txtFees);
                     TextView total = (TextView) activity.findViewById(R.id.txtTotal);
 
-                    cartSubTotal.setText("$" + Singleton.userOrder.getSubTotal());
-                    tax.setText("$" + Singleton.userOrder.getTax());
-                    total.setText("$" + Singleton.userOrder.getTotal());
+                    cartSubTotal.setText("$" + String.format("%.2f", Singleton.userOrder.getSubTotal()));
+                    tax.setText("$" + String.format("%.2f", Singleton.userOrder.getTax()));
+                    fees.setText("$" + String.format("%.2f", Singleton.userOrder.getFees()));
+                    total.setText("$" + String.format("%.2f", Singleton.userOrder.getTotal()));
 
                     notifyDataSetChanged();
                 }

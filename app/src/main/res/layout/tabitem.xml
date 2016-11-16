@@ -15,7 +15,7 @@
                 android:layout_width="67dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtName"
-                android:textSize="18sp" />
+                android:maxLines="1"/>
 
             <LinearLayout
                 android:orientation="vertical"

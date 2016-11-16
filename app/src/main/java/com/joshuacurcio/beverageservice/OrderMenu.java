@@ -73,19 +73,7 @@ public class OrderMenu extends AppCompatActivity implements View.OnClickListener
             menuList.setFocusableInTouchMode(true);
         }
         else if (id== R.id.buttonGoToCart){
-            double subTotal = 0.00;
-            int index = 0;
-            for(String key: Singleton.userMenuToCart.keySet())
-            {
-                if(Singleton.userCart.contains(Singleton.userMenuToCart.get(key)))
-                {
-                    Singleton.userCart.remove(Singleton.userMenuToCart.get(key));
-                }
-                Singleton.userCart.add(Singleton.userMenuToCart.get(key));
-                subTotal += Singleton.userCart.get(index).getPrice() * Singleton.userCart.get(index).getQuantity();
-                index++;
-            }
-            Singleton.userOrder = new UserOrder(Singleton.userCart, subTotal, subTotal*0.05, subTotal * 1.05);
+            Singleton.updateUserCart();
             startActivity(new Intent(OrderMenu.this, OrderCart.class));
         }
 

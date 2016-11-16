@@ -48,4 +48,27 @@ public class Singleton {
     public static ArrayList<OrderItem> userCart;
     public static HashMap<String, OrderItem> userMenuToCart;
 
+
+    public static void updateUserCart(){
+        double subTotal = 0.00;
+        double tax = 0.00;
+        double fees = 0.00;
+        double total = 0.00;
+        int index = 0;
+        for(String key: Singleton.userMenuToCart.keySet())
+        {
+            if(Singleton.userCart.contains(Singleton.userMenuToCart.get(key)))
+            {
+                Singleton.userCart.remove(Singleton.userMenuToCart.get(key));
+            }
+            Singleton.userCart.add(Singleton.userMenuToCart.get(key));
+            subTotal += Singleton.userCart.get(index).getPrice() * Singleton.userCart.get(index).getQuantity();
+            index++;
+        }
+        tax = subTotal * 0.05;
+        fees = (subTotal + .30)* .15;
+        total = subTotal + tax + fees;
+        Singleton.userOrder = new UserOrder(Singleton.userCart, subTotal, tax,  fees, total);
+
+    }
 }
