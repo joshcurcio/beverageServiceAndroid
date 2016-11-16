@@ -227,8 +227,6 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener, 
                     }
                 }
             });
-
-
             /************  Set holder with LayoutInflater ************/
             vi.setTag(holder);
         } else

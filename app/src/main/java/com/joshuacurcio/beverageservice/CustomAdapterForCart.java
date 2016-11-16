@@ -21,10 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.joshuacurcio.beverageservice.Objects.OrderItem;
+import com.joshuacurcio.beverageservice.Objects.UserOrder;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-import static com.google.android.gms.internal.zzs.TAG;
 
 /********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/
 public class CustomAdapterForCart extends BaseAdapter implements View.OnClickListener, Filterable {
@@ -115,7 +117,7 @@ public class CustomAdapterForCart extends BaseAdapter implements View.OnClickLis
                 } else {
 
                     constraint = constraint.toString().toLowerCase();
-                    Log.v(TAG, "category:" + constraint.toString().toLowerCase());
+                    Log.v("", "category:" + constraint.toString().toLowerCase());
 
 
                     String constraints = constraint.toString();
@@ -201,9 +203,9 @@ public class CustomAdapterForCart extends BaseAdapter implements View.OnClickLis
                 @Override
                 public void onClick(View v) {
                     int tempQty = -1;
-                    try{
+                    try
+                    {
                         tempQty = Integer.parseInt(holder.qty.getText().toString());
-
                     }
                     catch (Exception e)
                     {
@@ -216,10 +218,7 @@ public class CustomAdapterForCart extends BaseAdapter implements View.OnClickLis
                         {
                             Singleton.userMenuToCart.remove(tempValues.getName());
                             Singleton.userCart.remove(tempValues);
-                            if(Singleton.userCart.size() == 0)
-                            {
-                                notifyDataSetChanged();
-                            }
+                            notifyDataSetChanged();
                         }
                     }
                     else
@@ -233,9 +232,33 @@ public class CustomAdapterForCart extends BaseAdapter implements View.OnClickLis
                         try {
                             holder.qty.setText(Integer.toString(tempValues.getQuantity()));
                         } catch (Exception e) {
-                            Log.v(TAG, "you messed up");
+                            Log.v("", "you messed up");
                         }
                     }
+                    double subTotal = 0.00;
+                    int index = 0;
+                    for(String key: Singleton.userMenuToCart.keySet())
+                    {
+                        if(Singleton.userCart.contains(Singleton.userMenuToCart.get(key)))
+                        {
+                            Singleton.userCart.remove(Singleton.userMenuToCart.get(key));
+                        }
+                        Singleton.userCart.add(Singleton.userMenuToCart.get(key));
+                        subTotal += Singleton.userCart.get(index).getPrice() * Singleton.userCart.get(index).getQuantity();
+                        index++;
+                    }
+
+                    Singleton.userOrder = new UserOrder(Singleton.userCart, subTotal, subTotal*0.05, subTotal * 1.05);
+
+                    TextView cartSubTotal = (TextView) activity.findViewById(R.id.txtSubtotal);
+                    TextView tax = (TextView) activity.findViewById(R.id.txtTax);
+                    TextView total = (TextView) activity.findViewById(R.id.txtTotal);
+
+                    cartSubTotal.setText("$" + Singleton.userOrder.getSubTotal());
+                    tax.setText("$" + Singleton.userOrder.getTax());
+                    total.setText("$" + Singleton.userOrder.getTotal());
+
+                    notifyDataSetChanged();
                 }
             });
 
@@ -256,17 +279,22 @@ public class CustomAdapterForCart extends BaseAdapter implements View.OnClickLis
             tempValues = (OrderItem) data.get(position);
 
             /************  Set Model values in Holder elements ***********/
-            try {
+            try
+            {
                 holder.name.setText(tempValues.getName());
                 holder.price.setText(Double.toString(tempValues.getPrice()));
                 holder.qty.setText(Integer.toString(tempValues.getQuantity()));
             } catch (Exception e) {
-                Log.v(TAG, "you messed up");
+                Log.v("", "you messed up");
 
             }
         }
+
+        notifyDataSetChanged();
+
         return vi;
     }
+
 
     @Override
     public void onClick(View v) {
