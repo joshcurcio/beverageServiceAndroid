@@ -99,107 +99,11 @@ public class OrderCart extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.butConfirmCart) {
-            Card card = new Card("4242-4242-4242-4242", 12, 2017, "123");
-
-            if (!card.validateCard()) {
-                // Show errors
-            }
-
-            try
-            {
-                Stripe testStripe = new Stripe("pk_test_pTSNGlG76tNyYcGjATRkQ6XC");
-                testStripe.createToken(
-                        card,
-                        new TokenCallback() {
-                            public void onSuccess(Token token) {
-                                // Send token to your server
-
-                                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                                StrictMode.setThreadPolicy(policy);
-                                HttpURLConnection urlConn = null;
-                                String result = "-1";
-                                try {
-
-                                    URL url;
-                                    DataOutputStream printout;
-                                    String address = "https://ez-bev.herokuapp.com/checkout";
-                                    Log.d("sendPost",address);
-                                    url = new URL (address);
-                                    urlConn = (HttpsURLConnection) url.openConnection();
-                                    urlConn.setDoInput (true);
-                                    urlConn.setDoOutput (true);
-                                    urlConn.setRequestMethod("POST");
-                                    urlConn.setChunkedStreamingMode(100);
-
-                                    HashMap<String, String> postDataParams = new HashMap();
-                                    postDataParams.put("amount", Singleton.userOrder.getTotal().toString());
-                                    postDataParams.put("stripeToken", token.toString());
-                                    OutputStream os = urlConn.getOutputStream();
-                                    BufferedWriter writer = new BufferedWriter(
-                                            new OutputStreamWriter(os, "UTF-8"));
-                                    writer.write(getPostDataString(postDataParams));
-
-                                    writer.flush();
-                                    writer.close();
-                                    os.close();
-
-
-                                    // Send POST output.
-
-                                    printout = new DataOutputStream(urlConn.getOutputStream());
-                                    printout.flush();
-                                    result = urlConn.getResponseMessage();
-                                    Log.d(TAG, "onSuccess: "+ result);
-                                    if(result.equalsIgnoreCase("OK"))
-                                    {
-                                        Toast.makeText(OrderCart.this, "Payment Successful", Toast.LENGTH_LONG).show();
-                                    }
-
-                                    printout.close();
-                                    urlConn.connect();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }  finally {
-                                    if(urlConn !=null)
-                                        urlConn.disconnect();
-                                }
-
-
-                            }
-                            public void onError(Exception error) {
-                                // Show localized error message
-                            /*Toast.makeText(getContext(),
-                                    error.getLocalizedString(getContext()),
-                                    Toast.LENGTH_LONG
-                            ).show();*/
-                            }
-                        }
-                );
-            }
-            catch (Exception ex)
-            {
-
-            }
-
+            startActivity(new Intent(OrderCart.this, CardActivity.class));
         }
 
 
     }
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
-            if (first)
-                first = false;
-            else
-                result.append("&");
 
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
-    }
 
 }

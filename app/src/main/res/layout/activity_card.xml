@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <EditText android:id="@+id/cardNumber"
+        android:nextFocusDown="@+id/expMonth"
+        android:nextFocusRight="@+id/expMonth"
+        android:nextFocusForward="@+id/expMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:hint="Card Number" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/expMonth"
+            android:layout_weight="1"
+            android:hint="Exp Month" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/expYear"
+            android:layout_weight="1"
+            android:hint="Exp Year" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/txtCVC"
+            android:layout_weight="1"
+            android:hint="CVC" />
+
+
+    </LinearLayout>
+
+    <Button android:id="@+id/butPurchase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Purchase" />
+
+</LinearLayout>

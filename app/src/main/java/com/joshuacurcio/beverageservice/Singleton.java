@@ -66,9 +66,9 @@ public class Singleton {
             index++;
         }
         tax = subTotal * 0.05;
-        fees = (subTotal + .30)* .15;
+        fees = subTotal * .2;
         total = subTotal + tax + fees;
-        Singleton.userOrder = new UserOrder(Singleton.userCart, subTotal, tax,  fees, total);
+        Singleton.userOrder = new UserOrder(Singleton.mAuth.getCurrentUser().getUid(), Singleton.userCart, subTotal, tax,  fees, total);
 
     }
 }
