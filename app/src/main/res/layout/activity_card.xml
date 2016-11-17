@@ -11,6 +11,7 @@
         android:nextFocusDown="@+id/expMonth"
         android:nextFocusRight="@+id/expMonth"
         android:nextFocusForward="@+id/expMonth"
+        android:inputType="number"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:hint="Card Number" />
@@ -21,6 +22,9 @@
         android:orientation="horizontal">
 
         <EditText
+            android:nextFocusDown="@+id/expYear"
+            android:nextFocusRight="@+id/expYear"
+            android:nextFocusForward="@+id/expYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -30,6 +34,9 @@
             android:hint="Exp Month" />
 
         <EditText
+            android:nextFocusDown="@+id/txtCVC"
+            android:nextFocusRight="@+id/txtCVC"
+            android:nextFocusForward="@+id/txtCVC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -39,6 +46,9 @@
             android:hint="Exp Year" />
 
         <EditText
+            android:nextFocusDown="@+id/butPurchase"
+            android:nextFocusRight="@+id/butPurchase"
+            android:nextFocusForward="@+id/butPurchase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
