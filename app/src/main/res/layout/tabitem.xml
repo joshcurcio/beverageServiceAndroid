@@ -12,14 +12,14 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="67dp"
+                android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtName"
                 android:maxLines="1"/>
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="182dp"
+                android:layout_width="150dp"
                 android:layout_height="match_parent">
 
                 <LinearLayout

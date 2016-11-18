@@ -14,6 +14,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ErrorDialogFragment;
+import com.google.firebase.database.DatabaseReference;
+import com.joshuacurcio.beverageservice.Objects.DrinkItem;
+import com.joshuacurcio.beverageservice.Objects.FoodItem;
+import com.joshuacurcio.beverageservice.Objects.UserOrder;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
@@ -29,6 +33,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -128,7 +133,8 @@ public class CardActivity extends AppCompatActivity implements View.OnClickListe
                                     urlConn.disconnect();
                             }
 
-
+                            Singleton.userOrderID = Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").push().getKey();
+                            Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").child(Singleton.userOrderID).setValue(Singleton.userOrder);
                         }
                         public void onError(Exception error) {
                             // Show localized error message
@@ -215,10 +221,15 @@ public class CardActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.butPurchase) {
+            if(Singleton.userOrder == null)
+            {
+                Toast.makeText(this, "Order Cart is Empty", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(CardActivity.this, UserHome.class));
+                return;
+            }
             makePayment();
-            //go to map page
 
-            Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").push().setValue(Singleton.userOrder);
+
             startActivity(new Intent(CardActivity.this, UserMapsActivity.class));
         }
     }

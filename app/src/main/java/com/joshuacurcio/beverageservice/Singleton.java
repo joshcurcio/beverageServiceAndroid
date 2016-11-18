@@ -1,5 +1,6 @@
 package com.joshuacurcio.beverageservice;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.joshuacurcio.beverageservice.Objects.Course;
@@ -47,6 +48,9 @@ public class Singleton {
 
     public static ArrayList<OrderItem> userCart;
     public static HashMap<String, OrderItem> userMenuToCart;
+
+    public static String userOrderID;
+    public static LatLng userLocation;
 
 
     public static void updateUserCart(){

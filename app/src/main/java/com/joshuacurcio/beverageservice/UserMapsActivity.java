@@ -31,11 +31,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.joshuacurcio.beverageservice.Objects.Course;
 import com.joshuacurcio.beverageservice.Objects.OrderItem;
 import com.joshuacurcio.beverageservice.Objects.UserOrder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +74,7 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -80,16 +83,23 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
 
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             LocationListener locationListener = new MyLocationListener();
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10, locationListener);
 
             Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     for( DataSnapshot child : dataSnapshot.getChildren())
                     {
+                        Marker tempMarker;
                         UserOrder temp = dataSnapshot.getValue(UserOrder.class);
                         LatLng tempLatLng = new LatLng(temp.getLattitude(), temp.getLongitude());
-                        Marker tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        if(temp.getUser().equalsIgnoreCase(Singleton.mAuth.getCurrentUser().getUid()))
+                        {
+                            tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        } else {
+                            tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        }
                         courseOrders.put(child.getKey(), tempMarker);
                     }
 
@@ -101,7 +111,22 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                     {
                         UserOrder temp = dataSnapshot.getValue(UserOrder.class);
                         LatLng tempLatLng = new LatLng(temp.getLattitude(), temp.getLongitude());
-                        Marker tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        Marker tempMarker;
+                        if (courseOrders.get(child.getKey()) != null)
+                        {
+                            tempMarker = courseOrders.get(child.getKey());
+                            tempMarker.remove();
+                        }
+
+                        if(temp.getUser().equalsIgnoreCase(Singleton.mAuth.getCurrentUser().getUid()))
+                        {
+                            tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                        } else {
+                            tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        }
+
+
+                        courseOrders.remove(child.getKey());
                         courseOrders.put(child.getKey(), tempMarker);
                     }
                 }
@@ -113,8 +138,13 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                     {
                         UserOrder temp = dataSnapshot.getValue(UserOrder.class);
                         LatLng tempLatLng = new LatLng(temp.getLattitude(), temp.getLongitude());
-                        Marker tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).title(child.getKey()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                        courseOrders.put(child.getKey(), tempMarker);
+                        Marker tempMarker;
+                        if (courseOrders.get(child.getKey()) != null)
+                        {
+                            tempMarker = courseOrders.get(child.getKey());
+                            tempMarker.remove();
+                        }
+                        courseOrders.remove(child.getKey());
                     }
                 }
 
@@ -131,46 +161,34 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
 
         } else {
             // Show rationale and request permission.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1);
+
         }
-
-
-
-
     }
 
     private class MyLocationListener implements LocationListener {
 
         @Override
         public void onLocationChanged(Location loc) {
-            Toast.makeText(
-                    getBaseContext(),
-                    "Location changed: Lat: " + loc.getLatitude() + " Lng: "
-                            + loc.getLongitude(), Toast.LENGTH_SHORT).show();
-            String longitude = "Longitude: " + loc.getLongitude();
-            Log.v("LAT: ", longitude);
-            String latitude = "Latitude: " + loc.getLatitude();
-            Log.v("LONG: ", latitude);
+            Singleton.userLocation = new LatLng(loc.getLatitude(),loc.getLongitude());
+            Toast.makeText(UserMapsActivity.this, "LAT: " + Singleton.userLocation.latitude, Toast.LENGTH_SHORT).show();
+            Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").child(Singleton.userOrderID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Singleton.userOrder = dataSnapshot.getValue(UserOrder.class);
+                    Singleton.userOrder.setLongitude(Singleton.userLocation.longitude);
+                    Singleton.userOrder.setLattitude(Singleton.userLocation.latitude);
 
-        /*------- To get city name from coordinates -------- */
-            String cityName = null;
-            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-            List<Address> addresses;
-            try {
-                addresses = gcd.getFromLocation(loc.getLatitude(),
-                        loc.getLongitude(), 1);
-                if (addresses.size() > 0) {
-                    System.out.println(addresses.get(0).getLocality());
-                    cityName = addresses.get(0).getLocality();
+                    Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").child(Singleton.userOrderID).setValue(Singleton.userOrder);
+                    Singleton.userOrder = null;
                 }
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
-                    + cityName;
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
         }
 
         @Override

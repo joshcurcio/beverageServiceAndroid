@@ -15,6 +15,7 @@ public class UserOrder {
     private double lattitude;
     private double longitude;
     private String user;
+    private boolean delivered;
 
     public UserOrder(){
 
@@ -29,6 +30,15 @@ public class UserOrder {
         this.lattitude = 0.00;
         this.longitude = 0.00;
         this.user = user;
+        this.delivered = false;
+    }
+
+    public boolean isDelivered() {
+        return delivered;
+    }
+
+    public void setDelivered(boolean delivered) {
+        this.delivered = delivered;
     }
 
     public String getUser() {

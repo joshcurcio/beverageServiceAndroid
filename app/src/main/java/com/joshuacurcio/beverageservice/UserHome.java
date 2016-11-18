@@ -1,7 +1,10 @@
 package com.joshuacurcio.beverageservice;
 
+import android.*;
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
@@ -27,8 +30,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import static android.Manifest.permission_group.LOCATION;
+
 
 public class UserHome extends AppCompatActivity implements View.OnClickListener {
+    static final Integer LOCATION = 0x1;
+    static final Integer GPS_SETTINGS = 0x7;
     String TAG = "User Home";
     Spinner courseSpinner;
 
@@ -39,6 +46,24 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(UserHome.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            //This is called if user has denied the permission before
+            //In this case I am just asking the permission again
+            ActivityCompat.requestPermissions(UserHome.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION);
+        } else {
+
+            ActivityCompat.requestPermissions(UserHome.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},LOCATION);
+        }
+        if (ActivityCompat.shouldShowRequestPermissionRationale(UserHome.this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            //This is called if user has denied the permission before
+            //In this case I am just asking the permission again
+            ActivityCompat.requestPermissions(UserHome.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION);
+        } else {
+            ActivityCompat.requestPermissions(UserHome.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION);
+        }
+
+
 
         Singleton.CustomFoodListViewValuesArr = new ArrayList();
         Singleton.CustomDrinkListViewValuesArr = new ArrayList();
@@ -53,6 +78,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
             Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
         } else {
             // User is signed out
+            startActivity(new Intent(UserHome.this, MainActivity.class));
         }
 
         Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -92,7 +118,6 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 spinnerArrayAdapter.remove(Singleton.courseMap.get(dataSnapshot.getKey()).getCourseName());
                 Singleton.courseMap.remove(dataSnapshot.getKey());
-
                 Singleton.courseMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Course.class));
                 Singleton.courseMap.get(dataSnapshot.getKey()).setCourseID(dataSnapshot.getKey());
                 spinnerArrayAdapter.add(Singleton.courseMap.get(dataSnapshot.getKey()).getCourseName());
