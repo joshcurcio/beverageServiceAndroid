@@ -2,9 +2,15 @@ package com.joshuacurcio.beverageservice;
 
 import android.*;
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
@@ -12,6 +18,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -23,6 +30,7 @@ import com.joshuacurcio.beverageservice.Objects.Course;
 import com.joshuacurcio.beverageservice.Objects.DrinkItem;
 import com.joshuacurcio.beverageservice.Objects.FoodItem;
 import com.joshuacurcio.beverageservice.Objects.OrderItem;
+import com.joshuacurcio.beverageservice.Objects.UserOrder;
 import com.joshuacurcio.beverageservice.Objects.UserProfile;
 
 import java.util.ArrayList;
@@ -47,6 +55,14 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
 
+        Singleton.CustomFoodListViewValuesArr = new ArrayList();
+        Singleton.CustomDrinkListViewValuesArr = new ArrayList();
+        Singleton.userCart = new ArrayList<>();
+        Singleton.userMenuToCart = new HashMap<>();
+        Singleton.userOrderID = "";
+
+        Singleton.mAuth = FirebaseAuth.getInstance();
+
         if (ActivityCompat.shouldShowRequestPermissionRationale(UserHome.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             //This is called if user has denied the permission before
             //In this case I am just asking the permission again
@@ -63,19 +79,9 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
             ActivityCompat.requestPermissions(UserHome.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION);
         }
 
-
-
-        Singleton.CustomFoodListViewValuesArr = new ArrayList();
-        Singleton.CustomDrinkListViewValuesArr = new ArrayList();
-        Singleton.userCart = new ArrayList<>();
-        Singleton.userMenuToCart = new HashMap<>();
-
-        Singleton.mAuth = FirebaseAuth.getInstance();
-
         FirebaseUser user = Singleton.mAuth.getCurrentUser();
         if (user != null) {
             // User is signed in
-            Singleton.mDatabase = FirebaseDatabase.getInstance().getReference();
         } else {
             // User is signed out
             startActivity(new Intent(UserHome.this, MainActivity.class));
@@ -100,7 +106,6 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         Singleton.mDatabase.child("courses").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 Singleton.courseMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Course.class));
                 Singleton.courseMap.get(dataSnapshot.getKey()).setCourseID(dataSnapshot.getKey());
                 Singleton.courseIDNameRelationship.put(Singleton.courseMap.get(dataSnapshot.getKey()).getCourseName(), dataSnapshot.getKey().toString());
@@ -159,6 +164,7 @@ public class UserHome extends AppCompatActivity implements View.OnClickListener 
         Singleton.mAuth.signOut();
         startActivity(new Intent(UserHome.this, MainActivity.class));
     }
+
 
     @Override
     public void onClick(View v) {

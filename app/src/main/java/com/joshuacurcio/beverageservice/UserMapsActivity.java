@@ -25,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -82,9 +83,16 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
             mMap.setMyLocationEnabled(true);
 
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            LocationListener locationListener = new MyLocationListener();
+            android.location.LocationListener locationListener = new MyLocationListener();
+            Singleton.userLocation = new LatLng(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude(),locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude());
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, locationListener);
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10, locationListener);
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(Singleton.userLocation.latitude, Singleton.userLocation.longitude))      // Sets the center of the map to location user
+                    .zoom(17)                   // Sets the zoom
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
             Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").addChildEventListener(new ChildEventListener() {
                 @Override
@@ -93,16 +101,16 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                     {
                         Marker tempMarker;
                         UserOrder temp = dataSnapshot.getValue(UserOrder.class);
-                        LatLng tempLatLng = new LatLng(temp.getLattitude(), temp.getLongitude());
-                        if(temp.getUser().equalsIgnoreCase(Singleton.mAuth.getCurrentUser().getUid()))
-                        {
-                            tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                        } else {
-                            tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        if (temp.getUser() != null) {
+                            LatLng tempLatLng = new LatLng(temp.getLattitude(), temp.getLongitude());
+                            if (temp.getUser().equalsIgnoreCase(Singleton.mAuth.getCurrentUser().getUid())) {
+                                tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                            } else {
+                                tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                            }
+                            courseOrders.put(child.getKey(), tempMarker);
                         }
-                        courseOrders.put(child.getKey(), tempMarker);
                     }
-
                 }
 
                 @Override
@@ -112,22 +120,43 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                         UserOrder temp = dataSnapshot.getValue(UserOrder.class);
                         LatLng tempLatLng = new LatLng(temp.getLattitude(), temp.getLongitude());
                         Marker tempMarker;
-                        if (courseOrders.get(child.getKey()) != null)
-                        {
-                            tempMarker = courseOrders.get(child.getKey());
-                            tempMarker.remove();
-                        }
 
-                        if(temp.getUser().equalsIgnoreCase(Singleton.mAuth.getCurrentUser().getUid()))
+                        if(temp.isDelivered() == true)
                         {
-                            tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                            if (courseOrders.get(child.getKey()) != null)
+                            {
+                                tempMarker = courseOrders.get(child.getKey());
+                                tempMarker.remove();
+                            }
+
+                            if(temp.getUser().equalsIgnoreCase(Singleton.mAuth.getCurrentUser().getUid()))
+                            {
+                                tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                            } else {
+                                tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                            }
+
+                            courseOrders.remove(child.getKey());
+
                         } else {
-                            tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                            if (courseOrders.get(child.getKey()) != null)
+                            {
+                                tempMarker = courseOrders.get(child.getKey());
+                                tempMarker.remove();
+                            }
+
+                            if(temp.getUser() != null){
+                                if(temp.getUser().equalsIgnoreCase(Singleton.mAuth.getCurrentUser().getUid()))
+                                {
+                                    tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                                } else {
+                                    tempMarker = mMap.addMarker(new MarkerOptions().position(tempLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                                }
+
+                                courseOrders.remove(child.getKey());
+                                courseOrders.put(child.getKey(), tempMarker);
+                            }
                         }
-
-
-                        courseOrders.remove(child.getKey());
-                        courseOrders.put(child.getKey(), tempMarker);
                     }
                 }
 
@@ -170,25 +199,25 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
         @Override
         public void onLocationChanged(Location loc) {
             Singleton.userLocation = new LatLng(loc.getLatitude(),loc.getLongitude());
-            Toast.makeText(UserMapsActivity.this, "LAT: " + Singleton.userLocation.latitude, Toast.LENGTH_SHORT).show();
-            Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").child(Singleton.userOrderID).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Singleton.userOrder = dataSnapshot.getValue(UserOrder.class);
-                    Singleton.userOrder.setLongitude(Singleton.userLocation.longitude);
-                    Singleton.userOrder.setLattitude(Singleton.userLocation.latitude);
+            Log.d("", "LAT: " + Singleton.userLocation.latitude + " / LONG: " + Singleton.userLocation.longitude);
+            if((Singleton.userOrderID != null || !(Singleton.userOrderID.equalsIgnoreCase(""))) && (Singleton.selectedCourse != null || !(Singleton.selectedCourse.equalsIgnoreCase(""))))
+            {
+                Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").child(Singleton.userOrderID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Singleton.userOrder = dataSnapshot.getValue(UserOrder.class);
+                        Singleton.userOrder.setLongitude(Singleton.userLocation.longitude);
+                        Singleton.userOrder.setLattitude(Singleton.userLocation.latitude);
 
-                    Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").child(Singleton.userOrderID).setValue(Singleton.userOrder);
-                    Singleton.userOrder = null;
-                }
+                        Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").child(Singleton.userOrderID).setValue(Singleton.userOrder);
+                    }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
-
-
+                    }
+                });
+            }
         }
 
         @Override
@@ -200,4 +229,6 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
     }
+
+
 }

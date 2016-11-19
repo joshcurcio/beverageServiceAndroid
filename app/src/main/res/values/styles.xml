@@ -1,11 +1,16 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#92cd00</item>
+        <item name="colorPrimaryDark">#ffcf79</item>
+        <item name="colorAccent">#ffcf79</item>
+        <item name="android:colorBackground">@android:color/background_light</item>
+
+        <item name="buttonStyle">@style/CKButton</item>
+        <!-- For preview -->
+        <item name="android:buttonStyle">@style/CKButton</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -16,5 +21,10 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CKButton" parent="android:style/Widget.Button">
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">#ffcf79</item>
+    </style>
 
 </resources>

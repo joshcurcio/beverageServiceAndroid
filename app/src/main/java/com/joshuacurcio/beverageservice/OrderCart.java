@@ -99,6 +99,7 @@ public class OrderCart extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.butConfirmCart) {
+
             startActivity(new Intent(OrderCart.this, CardActivity.class));
         }
 

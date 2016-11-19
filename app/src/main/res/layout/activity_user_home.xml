@@ -22,12 +22,13 @@
         <TextView
             android:text="Select Location Below:"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView3" />
+            android:layout_height="35dp"
+            android:id="@+id/textView3"
+            android:textSize="16sp" />
 
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/courseSpinner" />
@@ -35,14 +36,16 @@
         <Button
             android:text="Place Order"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonPlaceOrder" />
+            android:layout_height="50dp"
+            android:id="@+id/buttonPlaceOrder"
+            style="@style/Widget.AppCompat.Button.Colored" />
 
         <Button
             android:text="Logout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonSignOut" />
+            android:layout_height="50dp"
+            android:id="@+id/buttonSignOut"
+            style="@style/Widget.AppCompat.Button.Colored" />
 
         <GridLayout
             android:layout_width="match_parent"

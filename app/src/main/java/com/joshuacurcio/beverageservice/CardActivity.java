@@ -1,8 +1,15 @@
 package com.joshuacurcio.beverageservice;
 
+import android.*;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.StrictMode;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,7 +21,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ErrorDialogFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.joshuacurcio.beverageservice.Objects.DrinkItem;
 import com.joshuacurcio.beverageservice.Objects.FoodItem;
 import com.joshuacurcio.beverageservice.Objects.UserOrder;
@@ -60,6 +71,7 @@ public class CardActivity extends AppCompatActivity implements View.OnClickListe
 
 
         purchase.setOnClickListener(this);
+
 
     }
 
@@ -133,6 +145,8 @@ public class CardActivity extends AppCompatActivity implements View.OnClickListe
                                     urlConn.disconnect();
                             }
 
+                            Singleton.userOrder.setLattitude(Singleton.userLocation.latitude);
+                            Singleton.userOrder.setLongitude(Singleton.userLocation.longitude);
                             Singleton.userOrderID = Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").push().getKey();
                             Singleton.mDatabase.child("courses").child(Singleton.selectedCourse).child("orders").child(Singleton.userOrderID).setValue(Singleton.userOrder);
                         }
@@ -148,6 +162,7 @@ public class CardActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
 
     private boolean validateForm() {
         boolean valid = true;

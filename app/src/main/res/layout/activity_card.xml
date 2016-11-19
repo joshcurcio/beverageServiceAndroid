@@ -61,8 +61,8 @@
     </LinearLayout>
 
     <Button android:id="@+id/butPurchase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="114dp"
+        android:layout_height="48dp"
         android:text="Purchase" />
 
 </LinearLayout>

@@ -39,19 +39,19 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="50dp">
 
             <Button
                 android:text="Create Account"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/butCreateAccount"
                 android:layout_weight="1" />
 
             <Button
                 android:text="Login"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/butLogin"
                 android:layout_weight="1" />
         </LinearLayout>
